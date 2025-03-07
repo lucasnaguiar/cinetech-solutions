@@ -1,0 +1,30 @@
+{
+	"name": "pecee/simple-router-demo",
+	"description": "Simple router demo project",
+	"keywords": [
+		"simple-router",
+		"php",
+		"php-simple-router"
+	],
+	"license": "MIT",
+	"type": "project",
+	"require": {
+		"php": ">=7.1",
+		"pecee/simple-router": "^5.0",
+		"robmorgan/phinx": "^0.16.2",
+		"vlucas/phpdotenv": "^5.6",
+		"firebase/php-jwt": "^6.10",
+		"vlucas/valitron": "^1.4",
+		"league/fractal": "^0.20.1"
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "app/",
+			"Core\\": "core/",
+			"Config\\": "config/"
+		}
+	}
+}
