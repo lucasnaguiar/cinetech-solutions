@@ -77,4 +77,21 @@ abstract class BaseModel
 
         return $result ? static::hydrateCollection($result) : [];
     }
+
+    public function create(array $data): static
+    {
+        if (empty($data)) {
+            throw new InvalidArgumentException('Os dados para inserção não podem estar vazios.');
+        }
+
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+
+        $query = "INSERT INTO {$this->table} (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($data);
+
+        return $this->findById($this->db->lastInsertId());
+    }
 }
