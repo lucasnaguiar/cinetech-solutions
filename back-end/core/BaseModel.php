@@ -54,16 +54,6 @@ abstract class BaseModel
         return $result ? static::hydrate($result) : null;
     }
 
-    public function findByUuid(string $uuid): ?static
-    {
-        $query = "SELECT * FROM {$this->table} WHERE uuid = :uuid";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute(['uuid' => $uuid]);
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ? static::hydrate($result) : null;
-    }
-
     public function findWhere(array $where): array
     {
         if (empty($where)) {
@@ -85,42 +75,6 @@ abstract class BaseModel
         $stmt->execute($params);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return $result ? static::hydrateCollection($result) : [];
-    }
-
-    public function findWhereAndInArray(
-        array $where,
-        string $arrayColumn,
-        array $values,
-        int $limit = 100
-    ): array {
-        if (empty($where)) {
-            throw new InvalidArgumentException('O array $where não pode estar vazio.');
-        }
-
-        $conditions = [];
-        $params = [];
-
-        foreach ($where as $column => $value) {
-            $conditions[] = "{$column} = :{$column}";
-            $params[":{$column}"] = $value;
-        }
-
-        $whereClause = implode(' AND ', $conditions);
-
-        $query = "SELECT * FROM {$this->table} WHERE {$whereClause}";
-
-        $valuesString = '{' . implode(',', $values) . '}';
-        $query .= " AND {$arrayColumn} @> :arrayValues";
-        $params[':arrayValues'] = $valuesString;
-
-        $query .= " LIMIT :limit";
-        $params[':limit'] = $limit;
-
-        $stmt = $this->db->prepare($query);
-        $stmt->execute($params);
-
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result ? static::hydrateCollection($result) : [];
     }
 }
