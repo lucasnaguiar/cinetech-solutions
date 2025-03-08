@@ -18,3 +18,9 @@ SimpleRouter::get('/api', callback: function () {
 SimpleRouter::get('/info-php', callback: function () {
     return phpinfo();
 });
+
+SimpleRouter::group(['prefix' => '/api'], callback: function () {
+    SimpleRouter::get('/products', callback: 'ProductController@index');
+    SimpleRouter::post('/products', callback: 'ProductController@store');
+    SimpleRouter::get('/products/{product}', callback: 'ProductController@show');
+});
