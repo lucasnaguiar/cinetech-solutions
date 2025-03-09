@@ -9,14 +9,11 @@ class Product extends BaseModel
 {
     protected string $table = "products";
     public int $id;
-
-    public function __construct(
-        public string $name,
-        public ?string $description = null,
-        public string $price,
-        public string $stock_quantity,
-        public string $created_at,
-    ) {}
+    public string $name;
+    public ?string $description = null;
+    public string $price;
+    public int $stock_quantity;
+    public string $created_at;
 
     public function setName(string $name): void
     {
@@ -37,4 +34,5 @@ class Product extends BaseModel
     {
         $this->stock_quantity = $stockQuantity;
     }
+
 }

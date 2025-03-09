@@ -108,7 +108,6 @@ abstract class BaseModel
         $placeholders = array_map(fn($col) => ":$col", $columns);
 
         $query = "INSERT INTO {$this->table} (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
-
         $stmt = $this->db->prepare($query);
         $stmt->execute($filteredData);
 

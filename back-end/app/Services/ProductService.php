@@ -3,12 +3,20 @@
 namespace App\Services;
 
 use App\Models\Product;
-use Valitron\Validator;
 
 class ProductService
 {
-    public function store(Product $product)
+    public function store($requestData): Product
     {
-        $product->create();
+        $product = new Product();
+        $product->name = $requestData->name;
+        $product->description = $requestData->description;
+        $product->stock_quantity = $requestData->stock_quantity;
+        $product->price = $requestData->price;
+        $product->created_at = date('Y-m-d H:i:s');
+
+        $product->save();
+
+        return $product;
     }
 }
