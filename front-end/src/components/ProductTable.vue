@@ -18,38 +18,20 @@
   </div>
 </template>
 <script setup lang="ts">
-const products = [
-  {
-    "id": 1,
-    "name": "Iphone 15 Pro Max",
-    "description": "um celular doidao",
-    "price": "4000.00",
-    "stock_quantity": 10,
-    "created_at": "2025-03-09 17:27:48"
-  },
-  {
-    "id": 2,
-    "name": "Iphone 15 Pro Max",
-    "description": "um celular doidao",
-    "price": "4000.00",
-    "stock_quantity": 10,
-    "created_at": "2025-03-09 17:39:27"
-  },
-  {
-    "id": 3,
-    "name": "Iphone 15 Pro Max",
-    "description": "um celular doidao",
-    "price": "4000.00",
-    "stock_quantity": 10,
-    "created_at": "2025-03-09 20:23:17"
-  },
-  {
-    "id": 4,
-    "name": "Relogio ROlex",
-    "description": "relogio automatico",
-    "price": "32723.00",
-    "stock_quantity": 2,
-    "created_at": "2025-03-09 20:38:38"
-  }
-];
+import {api} from '@/axios.ts'
+import type Product from '@/types/product';
+import { onMounted, ref } from 'vue';
+
+const products = ref<Product[]>([]);
+onMounted(() => {
+  getProdutcs()
+})
+
+const getProdutcs = async () => {
+  await api.get('/products').then(
+    (response) => {
+      products.value = response.data
+    }
+  );
+}
 </script>
