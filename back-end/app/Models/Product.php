@@ -7,17 +7,16 @@ use Core\BaseModel;
 
 class Product extends BaseModel
 {
-
     protected string $table = "products";
-
     public int $id;
-    public string $name;
-    public string $description;
-    public string $price;
-    public string $stock_quantity;
-    public string $created_at;
 
-    // construtor de basemodel??
+    public function __construct(
+        public string $name,
+        public ?string $description = null,
+        public string $price,
+        public string $stock_quantity,
+        public string $created_at,
+    ) {}
 
     public function setName(string $name): void
     {

@@ -94,4 +94,24 @@ abstract class BaseModel
 
         return $this->findById($this->db->lastInsertId());
     }
+
+    public function save(): static
+    {
+        $properties = get_object_vars($this);
+        $filteredData = array_filter($properties, fn($key) => $key !== 'db' && $key !== 'table', ARRAY_FILTER_USE_KEY);
+
+        if (empty($filteredData)) {
+            throw new InvalidArgumentException('Nenhuma propriedade válida encontrada para salvar.');
+        }
+
+        $columns = array_keys($filteredData);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+
+        $query = "INSERT INTO {$this->table} (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($filteredData);
+
+        return $this->findById($this->db->lastInsertId());
+    }
 }
