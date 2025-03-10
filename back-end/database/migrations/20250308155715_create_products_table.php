@@ -10,11 +10,11 @@ final class CreateProductsTable extends AbstractMigration
     {
         $table = $this->table('products');
         $table->addColumn('name', 'string')
-              ->addColumn('description', 'text')
-              ->addColumn('price', 'decimal', ['precision' => 10, 'scale' => 2])
-              ->addColumn('stock_quantity', 'integer')
-              ->addColumn('created_at', 'datetime')
-              ->create();
+            ->addColumn('description', 'text')
+            ->addColumn('price', 'decimal', ['precision' => 10, 'scale' => 2])
+            ->addColumn('stock_quantity', 'integer')
+            ->addColumn('created_at', 'datetime')
+            ->create();
     }
 
     public function down(): void
