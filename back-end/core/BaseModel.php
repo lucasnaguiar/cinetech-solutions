@@ -113,4 +113,37 @@ abstract class BaseModel
 
         return $this->findById($this->db->lastInsertId());
     }
+
+    public function update(): static
+    {
+        $properties = get_object_vars($this);
+
+        // Filtrar propriedades válidas (excluindo db e table)
+        $filteredData = array_filter($properties, fn($key) => $key !== 'db' && $key !== 'table', ARRAY_FILTER_USE_KEY);
+
+        if (empty($filteredData)) {
+            throw new InvalidArgumentException('Nenhuma propriedade válida encontrada para atualizar.');
+        }
+
+        if (!isset($filteredData['id'])) {
+            throw new InvalidArgumentException('O objeto precisa ter um ID definido para ser atualizado.');
+        }
+
+        $id = $filteredData['id'];
+        unset($filteredData['id']); // ID não entra na atualização
+
+        // Criar placeholders para a query
+        $setClause = implode(', ', array_map(fn($col) => "$col = :$col", array_keys($filteredData)));
+
+        // Construir a query de UPDATE
+        $query = "UPDATE {$this->table} SET {$setClause} WHERE id = :id";
+
+        // Adicionar o ID ao array de parâmetros
+        $filteredData['id'] = $id;
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($filteredData);
+
+        return $this->findById($id);
+    }
 }

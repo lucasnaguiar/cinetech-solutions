@@ -19,4 +19,17 @@ class ProductService
 
         return $product;
     }
+
+    public function update($product, $requestData): Product
+    {
+        $product->name = $requestData->name;
+        $product->description = $requestData->description;
+        $product->stock_quantity = $requestData->stock_quantity;
+        $product->price = $requestData->price;
+        $product->created_at = date('Y-m-d H:i:s');
+
+        $product->update();
+
+        return $product;
+    }
 }

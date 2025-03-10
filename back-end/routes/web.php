@@ -23,4 +23,5 @@ SimpleRouter::group(['prefix' => '/api'], callback: function () {
     SimpleRouter::get('/products', callback: 'ProductController@index');
     SimpleRouter::post('/products', callback: 'ProductController@store');
     SimpleRouter::get('/products/{product}', callback: 'ProductController@show');
+    SimpleRouter::patch('/products/{product}', callback: 'ProductController@update');
 });
