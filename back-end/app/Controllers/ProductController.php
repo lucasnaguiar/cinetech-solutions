@@ -92,7 +92,7 @@ class ProductController
         $requestData = (object) $requestData;
         $product = $this->productService->update($product, $requestData);
 
-        http_response_code(201);
+        http_response_code(200);
         return json_encode($product);
     }
 }
