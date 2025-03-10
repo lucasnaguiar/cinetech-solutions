@@ -60,8 +60,6 @@ class ProductController
         }
         return json_encode($product);
     }
-
-
     public function update($product)
     {
         $product = (new Product())->findById($product);
@@ -94,5 +92,23 @@ class ProductController
 
         http_response_code(200);
         return json_encode($product);
+    }
+
+    public function validate(array $data) {}
+    public function destroy($product)
+    {
+        $product = (new Product())->findById($product);
+
+        if (empty($product)) {
+            http_response_code(response_code: 404);
+            return json_encode(['message' => 'Produto não encontrado']);
+        }
+
+        if (!$product->delete()) {
+            http_response_code(response_code: 400);
+            return json_encode(['message' => 'A exclusão falhou.']);
+        }
+
+        http_response_code(response_code: 204);
     }
 }

@@ -130,20 +130,36 @@ abstract class BaseModel
         }
 
         $id = $filteredData['id'];
-        unset($filteredData['id']); // ID não entra na atualização
+        unset($filteredData['id']);
 
-        // Criar placeholders para a query
         $setClause = implode(', ', array_map(fn($col) => "$col = :$col", array_keys($filteredData)));
 
-        // Construir a query de UPDATE
         $query = "UPDATE {$this->table} SET {$setClause} WHERE id = :id";
 
-        // Adicionar o ID ao array de parâmetros
         $filteredData['id'] = $id;
 
         $stmt = $this->db->prepare($query);
         $stmt->execute($filteredData);
 
         return $this->findById($id);
+    }
+
+    public function delete(): bool
+    {
+        $properties = get_object_vars($this);
+
+        $filteredData = array_filter($properties, fn($key) => $key !== 'db' && $key !== 'table', ARRAY_FILTER_USE_KEY);
+
+        $id = $filteredData['id'];
+
+        if (!isset($id)) {
+            throw new InvalidArgumentException('O objeto precisa ter um ID definido para ser excluído.');
+        }
+
+        $query = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $success = $stmt->execute(['id' => $id]);
+
+        return $success;
     }
 }
