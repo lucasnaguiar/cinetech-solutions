@@ -1,29 +1,29 @@
 services:
     redis:
         image: 'redis:alpine'
-        container_name: product-manager-redis
+        container_name: cinetech-redis
         networks:
             - default
 
     mysql:
         image: 'mysql:8.0'
-        container_name: product-manager-mysql-development
+        container_name: cinetech-mysql-development
         working_dir: /application
         networks:
             - default
         volumes:
             - 'mysql-data:/var/lib/mysql'
         environment:
-            - MYSQL_ROOT_PASSWORD=product_manager
-            - MYSQL_DATABASE=product_manager
-            - MYSQL_USER=product_manager
-            - MYSQL_PASSWORD=product_manager
+            - MYSQL_ROOT_PASSWORD=cinetech
+            - MYSQL_DATABASE=cinetech
+            - MYSQL_USER=cinetech
+            - MYSQL_PASSWORD=cinetech
         ports:
             - '48005:3306'
 
     webserver:
         image: 'nginx:alpine'
-        container_name: product-manager-nginx
+        container_name: cinetech-nginx
         working_dir: /application
         networks:
             - default
@@ -35,7 +35,7 @@ services:
 
     php-fpm:
         build: back-end/phpdocker/php-fpm
-        container_name: product-manager-php-fpm
+        container_name: cinetech-php-fpm
         working_dir: /application
         networks:
             - default
@@ -46,6 +46,6 @@ services:
 
 networks:
     default:
-        name: product-manager-network
+        name: cinetech-network
 volumes:
     mysql-data:
