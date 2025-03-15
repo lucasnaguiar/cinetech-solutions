@@ -20,9 +20,9 @@ SimpleRouter::get('/info-php', callback: function () {
 });
 
 SimpleRouter::group(['prefix' => '/api'], callback: function () {
-    SimpleRouter::get('/products', callback: 'ProductController@index');
-    SimpleRouter::post('/products', callback: 'ProductController@store');
-    SimpleRouter::get('/products/{product}', callback: 'ProductController@show');
-    SimpleRouter::patch('/products/{product}', callback: 'ProductController@update');
-    SimpleRouter::delete('/products/{product}', callback: 'ProductController@destroy');
+    SimpleRouter::get('/genres', callback: 'GenreController@index');
+    SimpleRouter::post('/genres', callback: 'GenreController@store');
+    SimpleRouter::get('/genres/{genre}', callback: 'GenreController@show');
+    SimpleRouter::patch('/genres/{genre}', callback: 'GenreController@update');
+    SimpleRouter::delete('/genres/{genre}', callback: 'GenreController@destroy');
 });
