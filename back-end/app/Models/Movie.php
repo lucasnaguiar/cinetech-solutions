@@ -7,7 +7,7 @@ use Core\BaseModel;
 
 class Movie extends BaseModel
 {
-    protected string $table = "products";
+    protected string $table = "movies";
     public int $id;
     public string $title;
     public ?string $description = null;
