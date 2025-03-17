@@ -47,5 +47,6 @@ services:
 networks:
     cinetech-network:
         name: cinetech-network
+        driver: bridge
 volumes:
     mysql-data:
