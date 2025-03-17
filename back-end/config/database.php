@@ -12,7 +12,7 @@ return [
     "dbname" => $db_name,
     'username' =>  $db_user,
     'password' => $db_pass,
-    'dsn' => "pgsql:host=$db_host;port=$db_port;dbname=$db_name",
+    'dsn' => "mysql:host=$db_host;port=$db_port;dbname=$db_name", // Corrigido para MySQL
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
