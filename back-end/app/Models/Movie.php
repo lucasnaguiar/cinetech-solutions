@@ -13,9 +13,7 @@ class Movie extends BaseModel
     public ?string $description = null;
     public int $genre_id;
     public ?string $cover;
-
     public string $trailer_link;
-
     public string $release_date;
     public int $duration;
 
@@ -39,8 +37,18 @@ class Movie extends BaseModel
         $this->release_date = $releaseDate;
     }
 
+    public function setTrailerLink(string $trailerLink): void
+    {
+        $this->trailer_link = $trailerLink;
+    }
+
     public function setCover(string $cover): void
     {
         $this->cover = $cover;
+    }
+
+    public function setDuration(string $duration): void
+    {
+        $this->duration = $duration;
     }
 }
