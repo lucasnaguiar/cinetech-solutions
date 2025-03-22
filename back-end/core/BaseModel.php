@@ -78,6 +78,23 @@ abstract class BaseModel
         return $result ? static::hydrateCollection($result) : [];
     }
 
+    public function findWhereLike(string $column, string $value): array
+    {
+        $conditions = [];
+        $params = [];
+
+        $condition = "{$column} LIKE :{$column}";
+        $params[":{$column}"] = "%{$value}%";
+
+        $query = "SELECT * FROM {$this->table} WHERE {$condition} LIMIT 100";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result ? static::hydrateCollection($result) : [];
+    }
+
     public function create(array $data): static
     {
         if (empty($data)) {
