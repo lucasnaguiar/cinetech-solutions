@@ -9,8 +9,13 @@ class MovieService
     public function store($requestData): Genre
     {
         $movie = new Movie();
-        $movie->setName($requestData->name);
-        $movie->setDescription = $requestData->description;
+        $movie->setTitle($requestData->title);
+        $movie->setDescription($requestData->description);
+        $movie->setGenreId($requestData->genre_id);
+        $movie->setReleaseDate($requestData->release_date);
+        $movie->setTrailerLink($requestData->trailer_link);
+        $movie->setCover($requestData->cover);
+        $movie->setDuration($requestData->duration);
 
         $movie->save();
 
@@ -19,8 +24,13 @@ class MovieService
 
     public function update($movie, $requestData): Movie
     {
-        $movie->name = $requestData->name;
-        $movie->description = $requestData->description;
+        $movie->setTitle($requestData->title);
+        $movie->setDescription($requestData->description);
+        $movie->setGenreId($requestData->genre_id);
+        $movie->setReleaseDate($requestData->release_date);
+        $movie->setTrailerLink($requestData->trailer_link);
+        $movie->setCover($requestData->cover);
+        $movie->setDuration($requestData->duration);
         $movie->update();
 
         return $movie;

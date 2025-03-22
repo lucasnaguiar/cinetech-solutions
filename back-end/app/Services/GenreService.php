@@ -9,9 +9,8 @@ class GenreService
     public function store($requestData): Genre
     {
         $genre = new Genre();
-        $genre->name = $requestData->name;
-        $genre->description = $requestData->description;
-
+        $genre->setName($requestData->name);
+        $genre->setDescription($requestData->description);
         $genre->save();
 
         return $genre;
@@ -19,8 +18,8 @@ class GenreService
 
     public function update($genre, $requestData): Genre
     {
-        $genre->name = $requestData->name;
-        $genre->description = $requestData->description;
+        $genre->setName($requestData->name);
+        $genre->setDescription($requestData->description);
         $genre->update();
 
         return $genre;
