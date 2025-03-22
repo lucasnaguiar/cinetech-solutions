@@ -19,6 +19,15 @@ class MovieController
 
     public function index()
     {
+        $request = SimpleRouter::request();
+        $requestData = $request->getInputHandler()->all();
+
+        if (isset($requestData['search'])) {
+            $movieGenres = (new Movie())->findWhereLike('title', $requestData['search']);
+
+            return json_encode($movieGenres);
+        }
+
         $movieGenres = (new Movie())->findAll();
 
         return json_encode($movieGenres);
@@ -36,7 +45,7 @@ class MovieController
             $movie = $this->movieService->store($requestData);
             return json_encode(value: $movie);
         } catch (Exception $e) {
-            http_response_code($e->getCode());
+            http_response_code(500);
             return json_encode($e->getMessage());
         }
     }
@@ -75,14 +84,16 @@ class MovieController
     function validateRequest(array $requestData): void
     {
         $v = new Validator($requestData);
-        $v->rule('required', ['name', 'title', 'genre_id', 'release_date', 'duration']);
+        $v->rule('required', ['title', 'genre', 'release_date', 'duration']);
         $v->rule('lengthMax', 'title', 255);
         $v->rule('lengthMax', 'description', 255);
+        $v->rule('lengthMax', 'trailer_link', 255);
 
         if (!$v->validate()) {
             throw new Exception(json_encode($v->errors()), 422);
         }
     }
+
     public function destroy($movie)
     {
         $movie = (new Movie())->findById($movie);

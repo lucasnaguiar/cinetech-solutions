@@ -25,4 +25,10 @@ SimpleRouter::group(['prefix' => '/api'], callback: function () {
     SimpleRouter::get('/genres/{genre}', callback: 'GenreController@show');
     SimpleRouter::patch('/genres/{genre}', callback: 'GenreController@update');
     SimpleRouter::delete('/genres/{genre}', callback: 'GenreController@destroy');
+
+    SimpleRouter::get('/movies', callback: 'MovieController@index');
+    SimpleRouter::post('/movies', callback: 'MovieController@store');
+    SimpleRouter::get('/movies/{genre}', callback: 'MovieController@show');
+    SimpleRouter::patch('/movies/{genre}', callback: 'MovieController@update');
+    SimpleRouter::delete('/movies/{genre}', callback: 'MovieController@destroy');
 });

@@ -6,12 +6,12 @@ use App\Models\Movie;
 
 class MovieService
 {
-    public function store($requestData): Genre
+    public function store($requestData): Movie
     {
         $movie = new Movie();
         $movie->setTitle($requestData->title);
         $movie->setDescription($requestData->description);
-        $movie->setGenreId($requestData->genre_id);
+        $movie->setGenreId($requestData->genre);
         $movie->setReleaseDate($requestData->release_date);
         $movie->setTrailerLink($requestData->trailer_link);
         $movie->setCover($requestData->cover);

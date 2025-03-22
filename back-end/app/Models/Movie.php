@@ -51,4 +51,12 @@ class Movie extends BaseModel
     {
         $this->duration = $duration;
     }
+
+    public function searchByTitle(string $term): void
+    {
+        $query = "SELECT * FROM {$this->table} WHERE {$term} LIMIT 100";
+
+        $stmt = $this->db->prepare($query);
+        $success = $stmt->execute(['id' => $id]);
+    }
 }
