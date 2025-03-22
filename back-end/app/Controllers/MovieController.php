@@ -23,14 +23,14 @@ class MovieController
         $requestData = $request->getInputHandler()->all();
 
         if (isset($requestData['search'])) {
-            $movieGenres = (new Movie())->findWhereLike('title', $requestData['search']);
+            $movies = (new Movie())->findWhereLike('title', $requestData['search']);
 
-            return json_encode($movieGenres);
+            return json_encode($movies);
         }
 
-        $movieGenres = (new Movie())->findAll();
+        $movies = (new Movie())->findAll();
 
-        return json_encode($movieGenres);
+        return json_encode($movies);
     }
 
     public function store()
