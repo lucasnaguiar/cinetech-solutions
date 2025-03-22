@@ -44,19 +44,19 @@ class GenreController
     public function show($id)
     {
         $genre = (new Genre())->findById($id);
-        if (empty($product)) {
+        if (empty($genre)) {
             http_response_code(404);
-            return json_encode(['message' => 'Produto não encontrado']);
+            return json_encode(['message' => 'Genero não encontrado']);
         }
         return json_encode($genre);
     }
-    public function update($product)
+    public function update($genre)
     {
-        $genre = (new Genre())->findById($product);
+        $genre = (new Genre())->findById($genre);
 
-        if (empty($product)) {
+        if (empty($genre)) {
             http_response_code(404);
-            return json_encode(['message' => 'Produto não encontrado']);
+            return json_encode(['message' => 'Genero não encontrado']);
         }
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
