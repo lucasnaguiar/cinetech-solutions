@@ -10,6 +10,7 @@ class Movie extends BaseModel
     protected string $table = "movies";
     public int $id;
     public string $title;
+    public string $slug;
     public ?string $description = null;
     public int $genre_id;
     public ?string $cover;
@@ -20,6 +21,7 @@ class Movie extends BaseModel
     public function setTitle(string $title): void
     {
         $this->title = $title;
+        $this->slug = slugify($this->title);
     }
 
     public function setDescription(string $description): void
@@ -50,13 +52,5 @@ class Movie extends BaseModel
     public function setDuration(string $duration): void
     {
         $this->duration = $duration;
-    }
-
-    public function searchByTitle(string $term): void
-    {
-        $query = "SELECT * FROM {$this->table} WHERE {$term} LIMIT 100";
-
-        $stmt = $this->db->prepare($query);
-        $success = $stmt->execute(['id' => $id]);
     }
 }

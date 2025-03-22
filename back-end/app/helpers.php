@@ -1,5 +1,6 @@
 <?php
 
+use Cocur\Slugify\Slugify;
 use Pecee\SimpleRouter\SimpleRouter as Router;
 use Pecee\Http\Url;
 use Pecee\Http\Response;
@@ -85,4 +86,11 @@ function csrf_token(): ?string
     }
 
     return null;
+}
+
+function slugify(string $str): string
+{
+    $slugify = new Slugify();
+
+    return $slugify->slugify($str);;
 }

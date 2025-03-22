@@ -9,7 +9,9 @@ final class CreateMovieGenresTable extends AbstractMigration
     public function up(): void
     {
         $table = $this->table('movie_genres');
+
         $table->addColumn('name', 'string')
+            ->addColumn('slug', 'string')
             ->addColumn('description', 'text')
             ->create();
     }

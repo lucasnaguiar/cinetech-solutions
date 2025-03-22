@@ -10,6 +10,7 @@ final class CreateMoviesTable extends AbstractMigration
     {
         $table = $this->table('movies');
         $table->addColumn('title', 'string')
+            ->addColumn('slug', 'string')
             ->addColumn('description', 'text')
             ->addColumn('genre_id', 'integer')
             ->addColumn('cover', 'text')

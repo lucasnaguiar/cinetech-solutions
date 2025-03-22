@@ -36,7 +36,7 @@ class GenreController
             $genre = $this->genreService->store($requestData);
             return json_encode(value: $genre);
         } catch (Exception $e) {
-            http_response_code($e->getCode());
+            http_response_code(500);
             return json_encode($e->getMessage());
         }
     }
