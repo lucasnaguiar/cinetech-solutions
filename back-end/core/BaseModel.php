@@ -54,6 +54,16 @@ abstract class BaseModel
         return $result ? static::hydrate($result) : null;
     }
 
+    public function findBySlug(string $slug): ?static
+    {
+        $query = "SELECT * FROM {$this->table} WHERE slug = :slug";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute(['slug' => $slug]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? static::hydrate($result) : null;
+    }
+
     public function findWhere(array $where): array
     {
         if (empty($where)) {

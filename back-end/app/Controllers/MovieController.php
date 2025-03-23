@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Genre;
 use Exception;
 use App\Models\Movie;
 use App\Services\MovieService;
@@ -17,13 +18,28 @@ class MovieController
         $this->movieService = new MovieService();
     }
 
-    public function index()
+    public function index(?string $slug = null)
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
 
         if (isset($requestData['search'])) {
             $movies = (new Movie())->findWhereLike('title', $requestData['search']);
+
+            return json_encode($movies);
+        }
+
+        if (isset($requestData['slug'])) {
+            $genre = (new Genre())->findBySlug($slug);
+        }
+
+        if (isset($slug) && empty($genre)) {
+            http_response_code(404);
+            return json_encode('');
+        }
+
+        if (isset($slug) && !empty($genre)) {
+            $movies = (new Movie())->findWhere(['genre_id' => $genre->id]);
 
             return json_encode($movies);
         }
@@ -59,6 +75,7 @@ class MovieController
         }
         return json_encode($movie);
     }
+
     public function update($movie)
     {
         $movie = (new Movie())->findById($movie);
@@ -67,6 +84,7 @@ class MovieController
             http_response_code(404);
             return json_encode(['message' => 'Filme não encontrado']);
         }
+
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
 
@@ -81,7 +99,7 @@ class MovieController
         }
     }
 
-    function validateRequest(array $requestData): void
+    private function validateRequest(array $requestData): void
     {
         $v = new Validator($requestData);
         $v->rule('required', ['title', 'genre', 'release_date', 'duration']);
