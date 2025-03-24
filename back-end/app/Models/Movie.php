@@ -76,22 +76,6 @@ class Movie extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getMoviesByGenre(int $genreId): array
-    {
-        $query = "
-            SELECT m.*
-            FROM movies m
-            INNER JOIN movie_genre_movie mgm ON m.id = mgm.movie_id
-            WHERE mgm.genre_id = :genre_id
-        ";
-
-        $db = Database::getConnection();
-        $stmt = $db->prepare($query);
-        $stmt->execute(['genre_id' => $genreId]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function saveMovieGenres(array $genreIds): void
     {
         if (!isset($this->id)) {
@@ -121,5 +105,21 @@ class Movie extends BaseModel
             $this->db->rollBack();
             throw $e;
         }
+    }
+
+    public static function getMoviesByGenre(int $genreId): array
+    {
+        $query = "
+            SELECT m.*
+            FROM movies m
+            INNER JOIN movie_genre_movie mgm ON m.id = mgm.movie_id
+            WHERE mgm.genre_id = :genre_id
+        ";
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare($query);
+        $stmt->execute(['genre_id' => $genreId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

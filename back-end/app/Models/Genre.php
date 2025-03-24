@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Core\BaseModel;
-
+use Core\Database;
 
 class Genre extends BaseModel
 {

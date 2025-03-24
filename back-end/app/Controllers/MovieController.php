@@ -18,7 +18,7 @@ class MovieController
         $this->movieService = new MovieService();
     }
 
-    public function index(?string $slug = null)
+    public function index(?string $genreSlug = null)
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
@@ -29,17 +29,17 @@ class MovieController
             return json_encode($movies);
         }
 
-        if (isset($requestData['slug'])) {
-            $genre = (new Genre())->findBySlug($slug);
+        if (isset($requestData['genreSlug'])) {
+            $genre = (new Genre())->findBySlug($genreSlug);
         }
 
-        if (isset($slug) && empty($genre)) {
+        if (isset($genreSlug) && empty($genre)) {
             http_response_code(404);
             return json_encode('');
         }
 
-        if (isset($slug) && !empty($genre)) {
-            $movies = (new Movie())->findWhere(['genre_id' => $genre->id]);
+        if (isset($genreSlug) && !empty($genre)) {
+            $movies = (new Movie())::getMoviesByGenre($genre->id);
 
             return json_encode($movies);
         }
