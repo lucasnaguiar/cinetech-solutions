@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Core\BaseModel;
-
+use Core\Database;
+use Exception;
+use PDO;
 
 class Movie extends BaseModel
 {
@@ -11,8 +13,9 @@ class Movie extends BaseModel
     public int $id;
     public string $title;
     public string $slug;
+    public ?array $genres;
+
     public ?string $description = null;
-    public int $genre_id;
     public ?string $cover;
     public string $trailer_link;
     public string $release_date;
@@ -29,9 +32,9 @@ class Movie extends BaseModel
         $this->description = $description;
     }
 
-    public function setGenreId(string $genreId): void
+    public function setGenres(array $genres): void
     {
-        $this->genre_id = $genreId;
+        $this->genres = $genres;
     }
 
     public function setReleaseDate(string $releaseDate): void
@@ -52,5 +55,71 @@ class Movie extends BaseModel
     public function setDuration(string $duration): void
     {
         $this->duration = $duration;
+    }
+
+    public function getGenres(): array
+    {
+        if (!isset($this->id)) {
+            throw new Exception('O filme precisa ter um ID para buscar os gêneros.');
+        }
+
+        $query = "
+            SELECT mg.*
+            FROM movie_genres mg
+            INNER JOIN movie_genre_movie mgm ON mg.id = mgm.genre_id
+            WHERE mgm.movie_id = :movie_id
+        ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute(['movie_id' => $this->id]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getMoviesByGenre(int $genreId): array
+    {
+        $query = "
+            SELECT m.*
+            FROM movies m
+            INNER JOIN movie_genre_movie mgm ON m.id = mgm.movie_id
+            WHERE mgm.genre_id = :genre_id
+        ";
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare($query);
+        $stmt->execute(['genre_id' => $genreId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function saveMovieGenres(array $genreIds): void
+    {
+        if (!isset($this->id)) {
+            throw new Exception('O filme precisa ter um ID para salvar os gêneros.');
+        }
+
+        // Primeiro remove associações existentes
+        $this->db->beginTransaction();
+        try {
+            $deleteQuery = "DELETE FROM movie_genre_movie WHERE movie_id = :movie_id";
+            $deleteStmt = $this->db->prepare($deleteQuery);
+            $deleteStmt->execute(['movie_id' => $this->id]);
+
+            // Insere as novas associações
+            $insertQuery = "INSERT INTO movie_genre_movie (movie_id, genre_id) VALUES (:movie_id, :genre_id)";
+            $insertStmt = $this->db->prepare($insertQuery);
+            
+            foreach ($genreIds as $genreId) {
+                $insertStmt->execute([
+                    'movie_id' => $this->id,
+                    'genre_id' => $genreId
+                ]);
+            }
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 }

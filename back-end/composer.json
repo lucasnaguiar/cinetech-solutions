@@ -9,7 +9,7 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"php": ">=7.1",
+		"php": ">=8.3",
 		"pecee/simple-router": "^5.0",
 		"robmorgan/phinx": "^0.16.2",
 		"vlucas/phpdotenv": "^5.6",

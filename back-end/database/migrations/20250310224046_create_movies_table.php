@@ -12,7 +12,6 @@ final class CreateMoviesTable extends AbstractMigration
         $table->addColumn('title', 'string')
             ->addColumn('slug', 'string')
             ->addColumn('description', 'text')
-            ->addColumn('genre_id', 'integer')
             ->addColumn('cover', 'text')
             ->addColumn('trailer_link', 'text')
             ->addColumn('release_date', 'datetime')

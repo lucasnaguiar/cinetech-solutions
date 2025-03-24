@@ -102,7 +102,7 @@ class MovieController
     private function validateRequest(array $requestData): void
     {
         $v = new Validator($requestData);
-        $v->rule('required', ['title', 'genre', 'release_date', 'duration']);
+        $v->rule('required', ['title', 'genres', 'release_date', 'duration']);
         $v->rule('lengthMax', 'title', 255);
         $v->rule('lengthMax', 'description', 255);
         $v->rule('lengthMax', 'trailer_link', 255);
