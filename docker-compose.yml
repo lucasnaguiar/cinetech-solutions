@@ -36,6 +36,8 @@ services:
     php-fpm:
         build: back-end/phpdocker/php-fpm
         container_name: cinetech-php-fpm
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         working_dir: /application
         networks:
             - cinetech-network

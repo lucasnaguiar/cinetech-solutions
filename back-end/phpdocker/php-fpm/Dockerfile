@@ -4,6 +4,7 @@ WORKDIR "/application"
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
     git \
+    php8.3-xdebug \
     php8.3-mysql \
     php8.3-redis \
     && apt-get clean \
