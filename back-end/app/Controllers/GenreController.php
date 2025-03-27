@@ -50,9 +50,10 @@ class GenreController
         }
         return json_encode($genre);
     }
-    public function update($genre)
+
+    public function update($id)
     {
-        $genre = (new Genre())->findById($genre);
+        $genre = (new Genre())->findById($id);
 
         if (empty($genre)) {
             http_response_code(404);
@@ -87,9 +88,9 @@ class GenreController
             throw new Exception(json_encode($v->errors()), 422);
         }
     }
-    public function destroy($genre)
+    public function destroy($id)
     {
-        $genre = (new Genre())->findById($genre);
+        $genre = (new Genre())->findById($id);
 
         if (empty($genre)) {
             http_response_code(response_code: 404);

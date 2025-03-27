@@ -22,9 +22,9 @@ SimpleRouter::get('/info-php', callback: function () {
 SimpleRouter::group(['prefix' => '/api'], callback: function () {
     SimpleRouter::get('/genres', callback: 'GenreController@index');
     SimpleRouter::post('/genres', callback: 'GenreController@store');
-    SimpleRouter::get('/genres/{genre}', callback: 'GenreController@show');
-    SimpleRouter::patch('/genres/{genre}', callback: 'GenreController@update');
-    SimpleRouter::delete('/genres/{genre}', callback: 'GenreController@destroy');
+    SimpleRouter::get('/genres/{id}', callback: 'GenreController@show');
+    SimpleRouter::patch('/genres/{id}', callback: 'GenreController@update');
+    SimpleRouter::delete('/genres/{id}', callback: 'GenreController@destroy');
 
     SimpleRouter::get('/movies/{genre?}', callback: 'MovieController@index');
     SimpleRouter::post('/movies', callback: 'MovieController@store');
