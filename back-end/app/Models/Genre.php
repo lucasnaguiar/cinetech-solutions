@@ -17,7 +17,7 @@ class Genre extends BaseModel
     {
         $this->name = $name;
 
-        $this->slug = slugify($this->name);
+        $this->slug = $this->generateUniqueSlug($this->name);
     }
 
     public function setDescription(string $description): void

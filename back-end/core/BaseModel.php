@@ -16,7 +16,7 @@ abstract class BaseModel
         if (empty($this->table)) {
             throw new Exception('A propriedade "table" deve ser definida na classe que extende BaseModel.');
         }
-
+    
         $this->db = Database::getConnection();
     }
 
@@ -188,5 +188,54 @@ abstract class BaseModel
         $success = $stmt->execute(['id' => $id]);
 
         return $success;
+    }
+
+    /**
+     * Verifica se um slug já existe na tabela
+     */
+    protected function slugExists(string $slug, ?int $excludingId = null): bool
+    {
+        $query = "SELECT id FROM {$this->table} WHERE slug = :slug";
+        $params = ['slug' => $slug];
+        
+        if ($excludingId !== null) {
+            $query .= " AND id != :id";
+            $params['id'] = $excludingId;
+        }
+        
+        $query .= " LIMIT 1";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+        
+        return (bool) $stmt->fetch();
+    }
+
+    /**
+     * Gera um slug único baseado em um valor
+     */
+    public function generateUniqueSlug(string $value, ?int $excludingId = null): string
+    {
+        $slug = slugify($value);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while ($this->slugExists($slug, $excludingId)) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Valida se um slug é único (opcionalmente excluindo um ID)
+     * @throws Exception Se o slug já existir
+     */
+    public function validateUniqueSlug(string $slug, ?int $excludingId = null): void
+    {
+        if ($this->slugExists($slug, $excludingId)) {
+            throw new Exception("Já existe um registro com o slug '{$slug}'");
+        }
     }
 }
