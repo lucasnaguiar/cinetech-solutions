@@ -91,6 +91,7 @@ class MovieController
         $requestData = $request->getInputHandler()->all();
 
         try {
+            $movie->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
             $requestData = (object) $requestData;
             $movie = $this->movieService->update($movie, $requestData);
