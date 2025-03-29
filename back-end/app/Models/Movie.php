@@ -122,4 +122,9 @@ class Movie extends BaseModel
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function validateGenreIds(array $genreIds): void
+    {
+        $this->validateIdsExist($genreIds, 'movie_genres');
+    }
 }

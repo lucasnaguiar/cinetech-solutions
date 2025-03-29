@@ -55,6 +55,8 @@ class MovieController
         $requestData = $request->getInputHandler()->all();
 
         try {
+            $movieModel = new Movie();
+            $movieModel->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
 
             $requestData = (object) $requestData;

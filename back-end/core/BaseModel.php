@@ -238,4 +238,30 @@ abstract class BaseModel
             throw new Exception("Já existe um registro com o slug '{$slug}'");
         }
     }
+
+    public function validateIdsExist(array $ids, string $table, string $column = 'id'): void
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        // Remove duplicados e valores vazios
+        $ids = array_unique(array_filter($ids));
+        
+        if (empty($ids)) {
+            throw new Exception("Nenhum ID válido foi fornecido");
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $query = "SELECT COUNT(*) as count FROM {$table} WHERE {$column} IN ({$placeholders})";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->execute(array_values($ids));
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result['count'] !== count($ids)) {
+            throw new Exception("Um ou mais IDs não existem na tabela {$table}");
+        }
+    }
 }
