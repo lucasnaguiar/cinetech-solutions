@@ -78,9 +78,9 @@ class MovieController
         return json_encode($movie);
     }
 
-    public function update($movie)
+    public function update($id)
     {
-        $movie = (new Movie())->findById($movie);
+        $movie = (new Movie())->findById($id);
 
         if (empty($movie)) {
             http_response_code(404);
@@ -115,9 +115,9 @@ class MovieController
         }
     }
 
-    public function destroy($movie)
+    public function destroy($id)
     {
-        $movie = (new Movie())->findById($movie);
+        $movie = (new Movie())->findById($id);
 
         if (empty($movie)) {
             http_response_code(response_code: 404);
