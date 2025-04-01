@@ -6,16 +6,12 @@ use Phinx\Seed\AbstractSeed;
 
 class UserSeeder extends AbstractSeed
 {
-    /**
-     * Run Method.
-     *
-     * Write your database seeder using this method.
-     *
-     * More information on writing seeders is available here:
-     * https://book.cakephp.org/phinx/0/en/seeding.html
-     */
     public function run(): void
     {
+        if ($this->hasData()) {
+            echo 'A tabela users já contém dados. Seed não será executado.' . PHP_EOL;
+            return;
+        }
 
         $data = [
             [
@@ -26,14 +22,20 @@ class UserSeeder extends AbstractSeed
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                "username" => "joaonobrega",
-                "name" => "João Nobrega",
-                "email" => "joaonobrega31@gmail.com",
-                "password" => password_hash("nobrega@2024", PASSWORD_DEFAULT),
+                "username" => "samuel",
+                "name" => "Samuel",
+                "email" => "samuel@gmail.com",
+                "password" => password_hash("teste@123", PASSWORD_DEFAULT),
                 'created_at' => date('Y-m-d H:i:s')
             ],
         ];
 
         $this->table('users')->insert($data)->saveData();
+    }
+
+    protected function hasData(): bool
+    {
+        $count = $this->getAdapter()->fetchRow('SELECT COUNT(*) as count FROM users')['count'];
+        return $count > 0;
     }
 }
