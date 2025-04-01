@@ -20,6 +20,8 @@ SimpleRouter::get('/info-php', callback: function () {
 });
 
 SimpleRouter::group(['prefix' => '/api'], callback: function () {
+    SimpleRouter::post('/login', callback: 'AuthController@login');
+
     SimpleRouter::get('/genres', callback: 'GenreController@index');
     SimpleRouter::post('/genres', callback: 'GenreController@store');
     SimpleRouter::get('/genres/{id}', callback: 'GenreController@show');
