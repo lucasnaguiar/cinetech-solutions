@@ -92,7 +92,7 @@ class Movie extends BaseModel
             // Insere as novas associações
             $insertQuery = "INSERT INTO movie_genre_movie (movie_id, genre_id) VALUES (:movie_id, :genre_id)";
             $insertStmt = $this->db->prepare($insertQuery);
-            
+
             foreach ($genreIds as $genreId) {
                 $insertStmt->execute([
                     'movie_id' => $this->id,
@@ -126,5 +126,34 @@ class Movie extends BaseModel
     public function validateGenreIds(array $genreIds): void
     {
         $this->validateIdsExist($genreIds, 'movie_genres');
+    }
+
+    public function buildQuery(array $filters = []): \PDOStatement
+    {
+        $query = "SELECT m.* FROM movies m";
+        $params = [];
+        $conditions = [];
+
+        if (!empty($filters['genre'])) {
+            $query .= " JOIN movie_genre_movie mgm ON m.id = mgm.movie_id";
+            $conditions[] = "mgm.genre_id = :genre_id";
+            $params[':genre_id'] = $filters['genre'];
+        }
+
+        if (!empty($filters['search'])) {
+            $conditions[] = "m.title LIKE :search";
+            $params[':search'] = '%' . $filters['search'] . '%';
+        }
+
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        $query .= " ORDER BY m.title ASC";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+
+        return $stmt;
     }
 }

@@ -23,30 +23,25 @@ class MovieController
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
 
-        if (isset($requestData['search'])) {
-            $movies = (new Movie())->findWhereLike('title', $requestData['search']);
+        $filters = [];
+
+        if (!empty($requestData['search'])) {
+            $filters['search'] = trim($requestData['search']);
+        }
+
+        if (!empty($requestData['genre'])) {
+            $filters['genre'] = (int)$requestData['genre'];
+        }
+
+        try {
+            $stmt = (new Movie())->buildQuery($filters);
+            $movies = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             return json_encode($movies);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            return json_encode(['error' => 'Erro ao buscar filmes']);
         }
-
-        if (isset($requestData['genreSlug'])) {
-            $genre = (new Genre())->findBySlug($genreSlug);
-        }
-
-        if (isset($genreSlug) && empty($genre)) {
-            http_response_code(404);
-            return json_encode('');
-        }
-
-        if (isset($genreSlug) && !empty($genre)) {
-            $movies = (new Movie())::getMoviesByGenre($genre->id);
-
-            return json_encode($movies);
-        }
-
-        $movies = (new Movie())->findAll();
-
-        return json_encode($movies);
     }
 
     public function store()
