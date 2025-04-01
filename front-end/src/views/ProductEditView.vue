@@ -9,21 +9,21 @@
             <div class="col-span-full">
               <label for="name" class="block text-sm/6 font-medium text-gray-900">Nome do Produto</label>
               <div class="mt-2">
-                <input type="text" name="street-address" id="name" v-model="product?.name"
+                <input type="text" name="street-address" id="name"
                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-600 sm:text-sm/6" />
               </div>
             </div>
             <div class="sm:col-span-2 sm:col-start-1">
               <label for="quantity" class="block text-sm/6 font-medium text-gray-900">Quantidade</label>
               <div class="mt-2">
-                <input type="text" name="quantity" id="quantity" v-model="product?.stock_quantity"
+                <input type="text" name="quantity" id="quantity"
                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-600 sm:text-sm/6" />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label for="price" class="block text-sm/6 font-medium text-gray-900">Preço</label>
               <div class="mt-2">
-                <input type="text" name="price" id="price" v-model="product?.price"
+                <input type="text" name="price" id="price"
                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-600 sm:text-sm/6" />
               </div>
             </div>
@@ -33,7 +33,7 @@
         <div class="col-span-full">
           <label for="description" class="block text-sm/6 font-medium text-gray-900">Descrição</label>
           <div class="mt-2">
-            <textarea name="description" id="description" rows="3" v-model="product?.description"
+            <textarea name="description" id="description" rows="3"
               class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-gray-600 sm:text-sm/6" />
           </div>
         </div>
@@ -44,7 +44,7 @@
       <RouterLink to="/">
         <button type="button" class="text-sm/6 font-semibold text-gray-900">Voltar</button>
       </RouterLink>
-      <button type="button" @click="updateProduct()"
+      <button type="button"
         class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Atualizar
         dados</button>
     </div>
@@ -52,41 +52,41 @@
 </template>
 
 <script setup lang="ts">
-import type Product from '@/types/product';
+// import type Product from '@/types/product';
 import { onMounted, ref } from 'vue';
 import { api } from '@/axios.ts'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
-onMounted(() => {
-  getProdutc()
-})
-const product = ref<Product>()
+// onMounted(() => {
+//   getProdutc()
+// })
+// const product = ref<Product>()
 
-const getProdutc = async () => {
-  await api.get('/products/' + route.params.id).then(
-    (response) => {
-      product.value = response.data
-    }
-  );
-}
-
-const updateProduct = async () => {
-  if (product.value) {
-    await api.patch('/products', {
-      name: product.value.name,
-      stock_quantity: product.value.stock_quantity,
-      price: product.value.price,
-      description: product.value.description,
-    }).then(
-      (response) => {
-        console.log(response.data)
-      }
-    ).catch(function (error) {
-      console.error(error.response.data);
-    });
-  }
-}
+// const getProdutc = async () => {
+//   await api.get('/products/' + route.params.id).then(
+//     (response) => {
+//       product.value = response.data
+//     }
+//   );
+// }
+//
+// const updateProduct = async () => {
+//   if (product.value) {
+//     await api.patch('/products', {
+//       name: product.value.name,
+//       stock_quantity: product.value.stock_quantity,
+//       price: product.value.price,
+//       description: product.value.description,
+//     }).then(
+//       (response) => {
+//         console.log(response.data)
+//       }
+//     ).catch(function (error) {
+//       console.error(error.response.data);
+//     });
+//   }
+// }
 
 </script>

@@ -9,29 +9,29 @@
       </thead>
 
       <tbody class="divide-y divide-gray-200">
-        <tr v-for="product in products" :key="product.id">
-          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ product.name }}</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ product.stock_quantity }}</td>
-        </tr>
+<!--        <tr v-for="product in products" :key="product.id">-->
+<!--          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ product.name }}</td>-->
+<!--          <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ product.stock_quantity }}</td>-->
+<!--        </tr>-->
       </tbody>
     </table>
   </div>
 </template>
 <script setup lang="ts">
 import {api} from '@/axios.ts'
-import type Product from '@/types/product';
+// import type Product from '@/types/product';
 import { onMounted, ref } from 'vue';
 
 const products = ref<Product[]>([]);
-onMounted(() => {
-  getProdutcs()
-})
+// onMounted(() => {
+//   getProdutcs()
+// })
 
-const getProdutcs = async () => {
-  await api.get('/products').then(
-    (response) => {
-      products.value = response.data
-    }
-  );
-}
+// const getProdutcs = async () => {
+//   await api.get('/gender').then(
+//     (response) => {
+//       products.value = response.data
+//     }
+//   );
+// }
 </script>
