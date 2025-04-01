@@ -44,7 +44,7 @@
 </template>
 <script setup lang="ts">
 import { api } from '@/axios.ts'
-import type Product from '@/types/product';
+// import type Product from '@/types/product';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
@@ -56,15 +56,16 @@ onMounted(() => {
 const product = ref<Product>()
 
 const getProdutc = async () => {
-  await api.get('/products/' + route.params.id).then(
+  await api.get('/genres/' + route.params.id).then(
     (response) => {
       product.value = response.data
+      console.log(product.value)
     }
   );
 }
 
 const destroyProduct = async () => {
-  await api.delete('/products/' + route.params.id).then(
+  await api.delete('/genres/' + route.params.id).then(
     (response) => {
       router.push('/')
     }
