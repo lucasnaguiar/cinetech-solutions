@@ -38,10 +38,6 @@
                         </div>
                         <label for="remember-me" class="block text-sm/6 text-gray-900">Lembrar-me</label>
                     </div>
-
-                    <!-- <div class="text-sm/6">
-                <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
-              </div> -->
                 </div>
 
                 <div>
@@ -54,14 +50,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { api } from '@/axios'
+import { api } from '@/axios.ts'
 import { useRouter } from 'vue-router';
 import { useLoadingStore } from '@/stores/loading.ts'
 const loadingStore = useLoadingStore();
 
 const loginForm = ref({
-    email: '',
-    password: '',
+    email: 'lucasbarbary@gmail.com',
+    password: 'teste@123',
 })
 const router = useRouter();
 
@@ -77,8 +73,7 @@ const onSubmit = () => {
         .then(function (response) {
             if (response.status === 200) {
                 localStorage.setItem('access_token', response.data.token)
-                window.location.href = "/"
-
+                router.push({ name: 'movie-list' })
             }
         })
         .catch(function (error) {
