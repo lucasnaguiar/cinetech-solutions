@@ -61,8 +61,6 @@
         :movie="selectedMovie"
         @close="closeModal"
     />
-
-<!--    <Pagination class="mb-4" :dados="movies"></Pagination>-->
   </div>
 
   <Footer></Footer>
@@ -73,7 +71,6 @@ import { ref, onMounted, watch } from 'vue';
 import Navbar from "@/layouts/navbar.vue";
 import Footer from "@/layouts/footer.vue";
 import { Modal } from 'bootstrap';
-import Pagination from "@/components/Pagination.vue";
 import MovieCard from "@/components/Movies/MovieCard.vue";
 import DetailsModal from "@/components/Movies/DetailsModal.vue";
 import { api } from "@/axios.ts";

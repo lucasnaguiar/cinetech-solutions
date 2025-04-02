@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import MovieCreateView from '@/views/MovieCreateView.vue'
+import GenreCreateView from '@/views/GenreCreateView.vue'
 import MovieListView from "@/views/MovieListView.vue";
+import GenreListView from "@/views/GenreListView.vue";
 import LoginView from '@/views/LoginView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,17 +23,29 @@ const router = createRouter({
 
     },
     {
+      path: '/admin/generos/cadastro',
+      name: 'genre-create',
+      component: GenreCreateView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/admin/filmes/cadastro/:id?',
       name: 'movie-form',
       component: MovieCreateView,
       meta: { requiresAuth: true },
 
     },
-
     {
       path: '/admin/filmes',
       name: 'movie-list',
       component: MovieListView,
+      meta: { requiresAuth: true },
+
+    },
+    {
+      path: '/admin/generos',
+      name: 'genre-list',
+      component: GenreListView,
       meta: { requiresAuth: true },
 
     },
