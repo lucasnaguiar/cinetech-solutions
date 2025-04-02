@@ -1,3 +1,7 @@
 vendor
 .idea/
 .env
+public/storage/*
+# Exceção: não ignora esses dois arquivos SVG específicos
+!public/storage/covers/movie.svg
+!public/storage/covers/movie-2.svg

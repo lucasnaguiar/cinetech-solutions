@@ -9,3 +9,5 @@ RUN apt-get update \
     php8.4-redis \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+RUN chown -R www-data:www-data public/storage

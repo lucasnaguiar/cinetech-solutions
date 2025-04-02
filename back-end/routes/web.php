@@ -32,5 +32,6 @@ SimpleRouter::group(['prefix' => '/api'], callback: function () {
     SimpleRouter::post('/movies', callback: 'MovieController@store');
     SimpleRouter::get('/movies/{id}', callback: 'MovieController@show');
     SimpleRouter::patch('/movies/{id}', callback: 'MovieController@update');
+    SimpleRouter::post('/movies/{id}/update-cover', callback: 'MovieController@updateCover');
     SimpleRouter::delete('/movies/{id}', callback: 'MovieController@destroy');
 });

@@ -2,10 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Models\Genre;
+use Ramsey\Uuid\Uuid;
+
 use Exception;
 use App\Models\Movie;
 use App\Services\MovieService;
+use finfo;
 use Pecee\SimpleRouter\SimpleRouter;
 use Valitron\Validator;
 
@@ -18,7 +20,7 @@ class MovieController
         $this->movieService = new MovieService();
     }
 
-    public function index(?string $genreSlug = null)
+    public function index()
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
@@ -40,7 +42,7 @@ class MovieController
             return json_encode($movies);
         } catch (\Exception $e) {
             http_response_code(500);
-            return json_encode(['error' => 'Erro ao buscar filmes']);
+            return json_encode(['error' => $e->getMessage()]);
         }
     }
 
@@ -79,7 +81,7 @@ class MovieController
 
         if (empty($movie)) {
             http_response_code(404);
-            return json_encode(['message' => 'Filme não encontrado']);
+            return json_encode(['messageWQ' => 'Filme não encontrado']);
         }
 
         $request = SimpleRouter::request();
@@ -125,5 +127,91 @@ class MovieController
         }
 
         http_response_code(response_code: 204);
+    }
+
+    public function updateCover($id)
+    {
+        $movie = (new Movie())->findById($id);
+
+        if (empty($movie)) {
+            http_response_code(response_code: 404);
+            return json_encode(['message' => 'Filme não encontrado']);
+        }
+
+        if (!isset($_FILES['cover'])) {
+            return [
+                'success' => false,
+                'error' => 'Nenhum arquivo enviado'
+            ];
+        }
+
+        $uploadDir = __DIR__ . '/../../public/storage/covers/';
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize = 2 * 1024 * 1024; // 5MB
+
+        // 3. Validações
+        $file = $_FILES['cover'];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+
+        if (!in_array($mime, $allowedTypes)) {
+            return [
+                'success' => false,
+                'error' => 'Tipo de arquivo não permitido'
+            ];
+        }
+
+        if ($file['size'] > $maxSize) {
+            return [
+                'success' => false,
+                'error' => 'Arquivo muito grande (máx. 5MB)'
+            ];
+        }
+
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $fileName = Uuid::uuid4() . '.' . $extension;
+        $targetPath = $uploadDir . $fileName;
+
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                $error = error_get_last();
+                return json_encode([
+                    'success' => false,
+                    'error' => 'Falha ao criar diretório',
+                    'details' => $error['message'] ?? 'Erro desconhecido'
+                ], 500);
+            }
+        }
+
+        if (!is_writable($uploadDir)) {
+            return json_encode([
+                'success' => false,
+                'error' => 'Diretório sem permissão de escrita',
+                'details' => 'Verifique as permissões do diretório: ' . $uploadDir
+            ], 500);
+        }
+
+        if (!move_uploaded_file($_FILES['cover']['tmp_name'], $targetPath)) {
+            $error = error_get_last();
+            $errorDetails = [
+                'php_error' => $error['message'] ?? 'Erro desconhecido',
+                'tmp_name' => $_FILES['cover']['tmp_name'],
+                'target_path' => $targetPath,
+                'file_size' => $_FILES['cover']['size'],
+                'system_permissions' => substr(sprintf('%o', fileperms($uploadDir)), -4)
+            ];
+
+            return json_encode([
+                'success' => false,
+                'error' => 'Falha ao mover arquivo',
+                'details' => $errorDetails
+            ], 500);
+        }
+
+        return json_encode([
+            'success' => true,
+            'message' => 'Arquivo salvo com sucesso!',
+            'relative_path' => 'public/storage/covers/' . $fileName
+        ], 500);
     }
 }
