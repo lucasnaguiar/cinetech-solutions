@@ -8,6 +8,7 @@ class MovieGenreSeeder extends AbstractSeed
 {
     public function run(): void
     {
+
         if ($this->hasData()) {
             echo 'A tabela movie_genre_movie já contém dados. Seed não será executado.' . PHP_EOL;
             return;
@@ -65,5 +66,13 @@ class MovieGenreSeeder extends AbstractSeed
     {
         $count = $this->getAdapter()->fetchRow('SELECT COUNT(*) as count FROM movie_genre_movie')['count'];
         return $count > 0;
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            'GenreSeeder',
+            'MovieSeeder'
+        ];
     }
 }
