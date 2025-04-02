@@ -28,5 +28,11 @@
 			"Core\\": "core/",
 			"Config\\": "config/"
 		}
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"mkdir -p public/storage/covers",
+			"chmod -R 775 public/storage"
+		]
 	}
 }
