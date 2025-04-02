@@ -9,14 +9,15 @@
         <div class="mt-10 row">
           <div class="col-6">
             <label for="title" class="block text-sm/6 font-medium text-gray-900">Título</label>
-            <input type="text" id="title" v-model="movie.title" class="form-control"/>
+            <input type="text" id="title" v-model="movie.title" class="form-control" />
           </div>
 
           <div class="col-6">
             <label class="block text-sm/6 font-medium text-gray-900">Gênero</label>
             <div class="mt-2">
               <div v-for="genre in genres" :key="genre.id" class="form-check">
-                <input type="checkbox" :id="'genre-' + genre.id" :value="genre.id" v-model="movie.genres" class="form-check-input">
+                <input type="checkbox" :id="'genre-' + genre.id" :value="genre.id" v-model="movie.genres"
+                  class="form-check-input">
                 <label :for="'genre-' + genre.id" class="form-check-label">{{ genre.name }}</label>
               </div>
             </div>
@@ -24,22 +25,22 @@
 
           <div class="col-6 mt-2">
             <label for="trailer" class="block text-sm/6 font-medium text-gray-900">Link do Trailer (YouTube)</label>
-            <input type="text" id="trailer" v-model="movie.trailer_link" class="form-control"/>
+            <input type="text" id="trailer" v-model="movie.trailer_link" class="form-control" />
           </div>
 
           <div class="col-6 mt-2">
             <label for="release_date" class="block text-sm/6 font-medium text-gray-900">Data de Lançamento</label>
-            <input type="date" id="release_date" v-model="movie.release_date" class="form-control"/>
+            <input type="date" id="release_date" v-model="movie.release_date" class="form-control" />
           </div>
 
           <div class="col-6 mt-2">
             <label for="duration" class="block text-sm/6 font-medium text-gray-900">Duração (Minutos)</label>
-            <input type="number" id="duration" v-model="movie.duration" class="form-control"/>
+            <input type="number" id="duration" v-model="movie.duration" class="form-control" />
           </div>
 
           <div class="col-6 mt-2">
             <label for="cover" class="block text-sm/6 font-medium text-gray-900">Capa do Filme</label>
-            <input type="file" id="cover" @change="handleCoverUpload" accept="image/*" class="form-control"/>
+            <input type="file" id="cover" @change="handleCoverUpload" accept="image/*" class="form-control" />
             <div v-if="movie.coverPreview">
               <img :src="movie.coverPreview" alt="Capa atual" class="mt-2 img-thumbnail" width="100">
             </div>
@@ -57,8 +58,7 @@
       <RouterLink to="/filmes">
         <button type="button" class="text-sm/6 font-semibold text-gray-900">Voltar</button>
       </RouterLink>
-      <button type="button" @click="saveMovie"
-              class="btn btn-primary">
+      <button type="button" @click="saveMovie" class="btn btn-primary">
         {{ isEditing ? 'Atualizar' : 'Cadastrar' }}
       </button>
     </div>

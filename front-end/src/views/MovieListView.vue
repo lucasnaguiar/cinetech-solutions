@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-end mb-3">
-    <RouterLink to="/filmes/cadastro">
+    <RouterLink :to="{ name: 'movie-create' }">
       <button class="btn btn-primary">
         <i class="fa fa-plus me-2"></i>Novo Filme
       </button>
@@ -10,34 +10,34 @@
   <div class="mt-5 rounded-3">
     <table class="table table-responsive border border-1 shadow rounded-3 p-2">
       <thead>
-      <tr>
-        <th scope="col" class="text-center">ID</th>
-        <th scope="col" class="text-center">Título</th>
-        <th scope="col" class="text-center">Data de Lançamento</th>
-        <th scope="col" class="text-center">Duração</th>
-        <th scope="col" class="text-center">Trailer</th>
-        <th scope="col" class="text-center">Ações</th>
-      </tr>
+        <tr>
+          <th scope="col" class="text-center">ID</th>
+          <th scope="col" class="text-center">Título</th>
+          <th scope="col" class="text-center">Data de Lançamento</th>
+          <th scope="col" class="text-center">Duração</th>
+          <th scope="col" class="text-center">Trailer</th>
+          <th scope="col" class="text-center">Ações</th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(movie, index) in movies" :key="movie.id">
-        <th scope="row" class="text-center">{{ index + 1 }}</th>
-        <td class="text-center">{{ movie.title }}</td>
-        <td class="text-center">{{ formatDate(movie.release_date) }}</td>
-        <td class="text-center">{{ movie.duration }} min</td>
-        <td class="text-center">
-          <a v-if="movie.trailer_link" :href="movie.trailer_link" target="_blank">Assistir</a>
-          <span v-else>Não disponível</span>
-        </td>
-        <td class="text-center">
-          <RouterLink :to="`/filmes/cadastro/${movie.id}`" class="btn btn-warning btn-sm me-2">
-            <i class="fa fa-edit"></i>
-          </RouterLink>
-          <button @click="deleteMovie(movie.id)" class="btn btn-danger btn-sm">
-            <i class="fa fa-trash"></i>
-          </button>
-        </td>
-      </tr>
+        <tr v-for="(movie, index) in movies" :key="movie.id">
+          <th scope="row" class="text-center">{{ index + 1 }}</th>
+          <td class="text-center">{{ movie.title }}</td>
+          <td class="text-center">{{ formatDate(movie.release_date) }}</td>
+          <td class="text-center">{{ movie.duration }} min</td>
+          <td class="text-center">
+            <a v-if="movie.trailer_link" :href="movie.trailer_link" target="_blank">Assistir</a>
+            <span v-else>Não disponível</span>
+          </td>
+          <td class="text-center">
+            <RouterLink :to="`/filmes/cadastro/${movie.id}`" class="btn btn-warning btn-sm me-2">
+              <i class="fa fa-edit"></i>
+            </RouterLink>
+            <button @click="deleteMovie(movie.id)" class="btn btn-danger btn-sm">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
