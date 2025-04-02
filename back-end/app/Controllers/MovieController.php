@@ -81,7 +81,7 @@ class MovieController
 
         if (empty($movie)) {
             http_response_code(404);
-            return json_encode(['messageWQ' => 'Filme não encontrado']);
+            return json_encode(['message' => 'Filme não encontrado']);
         }
 
         $request = SimpleRouter::request();
@@ -134,38 +134,36 @@ class MovieController
         $movie = (new Movie())->findById($id);
 
         if (empty($movie)) {
-            http_response_code(response_code: 404);
-            return json_encode(['message' => 'Filme não encontrado']);
+            return jsonResponse(['message' => 'Filme não encontrado'], 404);
         }
 
         if (!isset($_FILES['cover'])) {
-            return [
+            return jsonResponse([
                 'success' => false,
                 'error' => 'Nenhum arquivo enviado'
-            ];
+            ], 422);
         }
 
         $uploadDir = __DIR__ . '/../../public/storage/covers/';
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         $maxSize = 2 * 1024 * 1024; // 5MB
 
-        // 3. Validações
         $file = $_FILES['cover'];
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->file($file['tmp_name']);
 
         if (!in_array($mime, $allowedTypes)) {
-            return [
+            return jsonResponse([
                 'success' => false,
                 'error' => 'Tipo de arquivo não permitido'
-            ];
+            ], 422);
         }
 
         if ($file['size'] > $maxSize) {
-            return [
+            return jsonResponse([
                 'success' => false,
                 'error' => 'Arquivo muito grande (máx. 5MB)'
-            ];
+            ], 422);
         }
 
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -175,7 +173,7 @@ class MovieController
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {
                 $error = error_get_last();
-                return json_encode([
+                return jsonResponse([
                     'success' => false,
                     'error' => 'Falha ao criar diretório',
                     'details' => $error['message'] ?? 'Erro desconhecido'
@@ -184,7 +182,7 @@ class MovieController
         }
 
         if (!is_writable($uploadDir)) {
-            return json_encode([
+            return jsonResponse([
                 'success' => false,
                 'error' => 'Diretório sem permissão de escrita',
                 'details' => 'Verifique as permissões do diretório: ' . $uploadDir
@@ -201,17 +199,17 @@ class MovieController
                 'system_permissions' => substr(sprintf('%o', fileperms($uploadDir)), -4)
             ];
 
-            return json_encode([
+            return jsonResponse([
                 'success' => false,
                 'error' => 'Falha ao mover arquivo',
                 'details' => $errorDetails
             ], 500);
         }
 
-        return json_encode([
+        return jsonResponse([
             'success' => true,
             'message' => 'Arquivo salvo com sucesso!',
             'relative_path' => 'public/storage/covers/' . $fileName
-        ], 500);
+        ], 200);
     }
 }
