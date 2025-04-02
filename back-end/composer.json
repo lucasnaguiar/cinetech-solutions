@@ -32,7 +32,8 @@
 	"scripts": {
 		"post-install-cmd": [
 			"mkdir -p public/storage/covers",
-			"chmod -R 775 public/storage"
+			"chmod -R 775 public/storage",
+			"chown -R www-data:www-data public/storage"
 		]
 	}
 }
