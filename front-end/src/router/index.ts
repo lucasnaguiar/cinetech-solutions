@@ -23,11 +23,12 @@ const router = createRouter({
 
     },
     {
-      path: '/admin/generos/cadastro',
+      path: '/admin/generos/cadastro/:id?',
       name: 'genre-create',
       component: GenreCreateView,
       meta: { requiresAuth: true },
     },
+
     {
       path: '/admin/filmes/cadastro/:id?',
       name: 'movie-form',

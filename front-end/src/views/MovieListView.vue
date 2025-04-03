@@ -30,7 +30,7 @@
             <span v-else>Não disponível</span>
           </td>
           <td class="text-center">
-            <RouterLink :to="`/filmes/cadastro/${movie.id}`" class="btn btn-warning btn-sm me-2">
+            <RouterLink :to="`filmes/cadastro/${movie.id}`" class="btn btn-warning btn-sm me-2">
               <i class="fa fa-edit"></i>
             </RouterLink>
             <button @click="deleteMovie(movie.id)" class="btn btn-danger btn-sm">

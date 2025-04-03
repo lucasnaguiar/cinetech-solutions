@@ -43,15 +43,29 @@ const isEditing = ref(false);
 const genreId = ref(null);
 
 const genre = ref({
+  id: '',
   name: '',
   description: '',
 });
 
 
 onMounted(() => {
-  // loadMovie();
+  loadGenre();
 });
 
+const loadGenre = async () => {
+  if (route.params.id) {
+    isEditing.value = true;
+    genreId.value = route.params.id;
+    try {
+      const response = await api.get(`/genres/${genreId.value}`);
+      genre.value = response.data;
+
+    } catch (error) {
+      console.error('Erro ao carregar genero:', error);
+    }
+  }
+};
 const saveGenre = async () => {
   const formData = new FormData();
   formData.append('name', genre.value.name);
