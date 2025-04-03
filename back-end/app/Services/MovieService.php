@@ -86,6 +86,14 @@ class MovieService
 
     }
 
+    public function updateCover($movie, $requestData): Movie
+    {
+        $coverPath = isset($requestData->cover) ? $this->uploadCover($requestData->cover) : $movie->cover;
+        $movie->cover = $coverPath;
+        $movie->update();
+        return $movie;
+    }
+
     public function uploadCover($file): string
     {
         $file = $_FILES['cover'];

@@ -95,6 +95,31 @@ class MovieController
         }
     }
 
+    public function updateCover($id)
+    {
+        $movie = (new Movie())->findById($id);
+
+        if (empty($movie)) {
+            http_response_code(404);
+            return json_encode(['message' => 'Filme não encontrado']);
+        }
+
+        $request = SimpleRouter::request();
+        $requestData = $request->getInputHandler()->all();
+       
+        if (empty($requestData['cover'])) {
+            return jsonResponse(['message' => 'É obrigatório enviar o arquivo de imagem.'], 422);
+        }
+
+        try {
+            $requestData = (object) $requestData;
+            $movie = $this->movieService->updateCover($movie, $requestData);
+            return jsonResponse($movie, 200);
+        } catch (Exception $e) {
+            return jsonResponse($e->getMessage(), 500);
+        }
+    }
+
     private function validateRequest(array $requestData): void
     {
         $v = new Validator($requestData);
