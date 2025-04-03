@@ -5,7 +5,7 @@
       <div class="card-header p-1 fw-semibold">
         {{ movie.genre }}
       </div>
-      <img :src="movie.cover" class="" alt="Imagem de capa">
+      <img :src="coverUrl + movie.cover" class="" alt="Imagem de capa">
       <div class="card-body">
         <h5 class="card-title">{{ movie.title }}</h5>
         <div class="btn btn-sm btn-primary mt-4" @click="showDetails">
@@ -18,13 +18,13 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 const props = defineProps({
   movie: Object,
   onShowDetails: Function
 });
-
+const coverUrl = ref(import.meta.env.VITE_API_BASE_URL)
 const showDetails = () => {
   props.onShowDetails(props.movie);
 };
