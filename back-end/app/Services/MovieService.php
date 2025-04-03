@@ -13,7 +13,7 @@ class MovieService
         $movie->setDescription($requestData->description);
         $movie->setReleaseDate($requestData->release_date);
         $movie->setTrailerLink($requestData->trailer_link);
-        $movie->setCover($requestData->cover);
+        $movie->setCover('movie.svg');
         $movie->setDuration($requestData->duration);
 
         $movie = $movie->save();

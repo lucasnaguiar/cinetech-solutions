@@ -50,19 +50,14 @@ class MovieController
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
+        $requestData['genres'] = explode(',', $requestData['genres'][0]);
+        $movieModel = new Movie();
+        $movieModel->validateGenreIds($requestData['genres']);
+        $this->validateRequest($requestData);
 
-        try {
-            $movieModel = new Movie();
-            $movieModel->validateGenreIds($requestData['genres']);
-            $this->validateRequest($requestData);
-
-            $requestData = (object) $requestData;
-            $movie = $this->movieService->store($requestData);
-            return json_encode(value: $movie);
-        } catch (Exception $e) {
-            http_response_code(500);
-            return json_encode($e->getMessage());
-        }
+        $requestData = (object) $requestData;
+        $movie = $this->movieService->store($requestData);
+        return json_encode(value: $movie);
     }
 
     public function show($id)
