@@ -1,11 +1,10 @@
 export default interface Movie {
-    id?: number|null;
-    title?: string;
-    description?: string;
-    genres?: Number[]|Genre[];
-    cover?: File|null|string;
-    coverPreview?: URL;
-    release_date?: string;
-    trailer_link?: string;
-    duration?:Number|null
+    id?: number | null;
+    title: string | null;
+    genres: number[] | null;
+    trailer_link: string | null;
+    release_date: string | null; // ISO format (YYYY-MM-DD)
+    duration: number | null;
+    description: string | null;
+    cover?: File | null; // Arquivo é sempre opcional
 };

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import MovieCreateView from '@/views/MovieCreateView.vue'
+import MovieEditView from '@/views/MovieEditView.vue'
 import GenreCreateView from '@/views/GenreCreateView.vue'
 import MovieListView from "@/views/MovieListView.vue";
 import GenreListView from "@/views/GenreListView.vue";
@@ -53,7 +54,7 @@ const router = createRouter({
     {
       path: '/admin/filmes/editar/:id',
       name: 'movie-update',
-      component: MovieCreateView,
+      component: MovieEditView,
       meta: { requiresAuth: true },
 
     },

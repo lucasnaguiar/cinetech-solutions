@@ -50,13 +50,21 @@ class MovieController
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
-        $requestData['genres'] = explode(',', $requestData['genres'][0]);
-        $movieModel = new Movie();
-        $movieModel->validateGenreIds($requestData['genres']);
-        $this->validateRequest($requestData);
 
-        $requestData = (object) $requestData;
-        $movie = $this->movieService->store($requestData);
+        $requestData['genres'] = json_decode($requestData['genres'], true);
+
+        try {
+            $movieModel = new Movie();
+
+            $movieModel->validateGenreIds($requestData['genres']);
+            $this->validateRequest($requestData);
+
+            $requestData = (object) $requestData;
+            $movie = $this->movieService->store($requestData);
+        } catch (Exception $e) {
+            http_response_code(500);
+            return json_encode($e->getMessage());
+        }
         return json_encode(value: $movie);
     }
 
@@ -106,7 +114,7 @@ class MovieController
 
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
-       
+
         if (empty($requestData['cover'])) {
             return jsonResponse(['message' => 'É obrigatório enviar o arquivo de imagem.'], 422);
         }
@@ -129,7 +137,7 @@ class MovieController
         $v->rule('lengthMax', 'trailer_link', 255);
 
         if (!$v->validate()) {
-            throw new Exception(json_encode($v->errors()), 422);
+            throw new Exception($v->errors());
         }
     }
 
