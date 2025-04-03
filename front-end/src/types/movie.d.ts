@@ -1,9 +1,11 @@
-export default interface Genre {
-    id?: number;
-    title: string;
+export default interface Movie {
+    id?: number|null;
+    title?: string;
     description?: string;
-    genres?: [];
+    genres?: Number[]|Genre[];
+    cover?: File|null|string;
+    coverPreview?: URL;
     release_date?: string;
     trailer_link?: string;
-    duration?:string
+    duration?:Number|null
 };
