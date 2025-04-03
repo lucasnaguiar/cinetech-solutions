@@ -68,6 +68,7 @@ class MovieController
     public function show($id)
     {
         $movie = (new Movie())->findById($id);
+        $movie->genres = $movie->getGenres();
         if (empty($movie)) {
             http_response_code(404);
             return json_encode(['message' => 'Filme não encontrado']);
