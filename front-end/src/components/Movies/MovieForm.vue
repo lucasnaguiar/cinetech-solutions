@@ -53,7 +53,10 @@
                 <!-- Capa do Filme -->
                 <div class="col-6 mt-2">
                     <label for="cover" class="block text-sm/6 font-medium text-gray-900">Capa do Filme</label>
-                    <input type="file" accept="image/*" @change="handleCoverUpload" class="form-control" name="cover"/>
+                    <!-- <input type="file" accept="image/*" @change="handleCoverUpload" class="form-control" name="cover"/> -->
+                    <Field type="file" accept="image/*" @change="handleCoverUpload" class="form-control" name="cover"
+                        rules="required|numeric|min_value:1" />
+                    <ErrorMessage name="cover" class="text-danger small" />
                 </div>
             </div>
         </div>
@@ -90,6 +93,9 @@ const validationSchema = yup.object({
     duration: yup.number().required('Duração é obrigatória').positive().integer(),
     description: yup.string().required('Descrição é obrigatória'),
     genres: yup.array().min(1, 'Selecione pelo menos um gênero').required('Gênero é obrigatório'),
+    cover: yup.mixed().test('required-file', 'A capa do filme é obrigatória', () => {
+        return !!coverFile.value; // Retorna `true` se houver arquivo, `false` se estiver vazio
+    })
 });
 
 const { handleSubmit, errors } = useForm({
@@ -117,6 +123,9 @@ const description = useField('description');
 const { value: genresValue, errorMessage: genresError } = useField<number[]>('genres', undefined, {
   initialValue: []
 });
+const cover = useField('cover', yup.mixed().test('required-file', 'A capa do filme é obrigatória', () => {
+    return !!coverFile.value;
+}));
 
 const emit = defineEmits<{
     (event: 'submit-form', data: FormData): void;
@@ -136,7 +145,7 @@ const submitForm = handleSubmit((values) => {
 
     // Se houver um arquivo de capa, adicioná-lo
     if (coverFile.value) {
-        formData.append('cover', coverFile.value);
+        formData.append('cover', values.cover);
     }
 
 
