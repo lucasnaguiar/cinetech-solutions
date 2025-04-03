@@ -61,11 +61,12 @@ class MovieController
 
             $requestData = (object) $requestData;
             $movie = $this->movieService->store($requestData);
+
         } catch (Exception $e) {
             http_response_code(500);
             return json_encode($e->getMessage());
         }
-        return json_encode(value: $movie);
+        return jsonResponse($movie);
     }
 
     public function show($id)
