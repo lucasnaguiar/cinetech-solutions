@@ -73,10 +73,7 @@ const saveGenre = async () => {
 
   try {
     if (isEditing.value) {
-      await api.put(`/genres/${genreId.value}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
+      await api.patch(`/genres/${genreId.value}`, formData);
       Swal.fire({
         icon: 'success',
         title: 'Genero atualizado com sucesso!',
