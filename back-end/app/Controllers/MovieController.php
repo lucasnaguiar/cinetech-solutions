@@ -88,7 +88,7 @@ class MovieController
             $this->validateRequest($requestData);
             $requestData = (object) $requestData;
             $movie = $this->movieService->update($movie, $requestData);
-            return json_encode(value: $movie);
+            return jsonResponse($movie);
         } catch (Exception $e) {
             http_response_code($e->getCode());
             return json_encode($e->getMessage());

@@ -36,12 +36,12 @@ class MovieService
 
         $movie->setTitle($requestData->title);
         $movie->setDescription($requestData->description);
-        $movie->setGenreId($requestData->genre_id);
         $movie->setReleaseDate($requestData->release_date);
         $movie->setTrailerLink($requestData->trailer_link);
         $movie->setCover($coverPath);
         $movie->setDuration($requestData->duration);
         $movie->update();
+        $movie->saveMovieGenres($requestData->genres);
 
         return $movie;
     }
