@@ -9,7 +9,7 @@ import Navbar from "@/layouts/navbar.vue";
       <h4 class="text-center">Menu</h4>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <RouterLink :to="{ name: 'movie-list' }" class="nav-link text-white d-flex align-items-center">
+          <RouterLink :to="{ name: 'home' }" class="nav-link text-white d-flex align-items-center">
             <i class="fas fa-home me-2"></i> <span>Home</span>
           </RouterLink>
         </li>
@@ -19,7 +19,7 @@ import Navbar from "@/layouts/navbar.vue";
           </RouterLink>
         </li>
         <li class="nav-item">
-          <RouterLink to="/genres" class="nav-link text-white d-flex align-items-center">
+          <RouterLink :to="{ name: 'genre-list' }" class="nav-link text-white d-flex align-items-center">
             <i class="fas fa-box me-2"></i> <span>Gêneros</span>
           </RouterLink>
         </li>

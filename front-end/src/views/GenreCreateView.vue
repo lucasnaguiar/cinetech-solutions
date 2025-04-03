@@ -68,7 +68,7 @@ const saveGenre = async () => {
         title: 'Genero atualizado com sucesso!',
         confirmButtonText: 'OK'
       }).then(() => {
-        router.push('/filmes');
+        router.push('/admin/generos');
       });
 
     } else {
@@ -81,7 +81,7 @@ const saveGenre = async () => {
         title: 'Genero cadastrado com sucesso!',
         confirmButtonText: 'OK'
       }).then(() => {
-        router.push('/filmes');
+        router.push('/admin/generos');
       });
     }
 

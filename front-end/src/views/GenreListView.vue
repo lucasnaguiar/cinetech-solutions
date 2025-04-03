@@ -18,6 +18,7 @@
       </thead>
       <tbody>
         <tr v-for="(genre, index) in genres" :key="genre.id">
+          <td class="text-center">{{ genre.id }}</td>
           <td class="text-center">{{ genre.name }}</td>
           <td class="text-center">
             <RouterLink :to="`/admin/generos/cadastro/${genre.id}`" class="btn btn-warning btn-sm me-2">
@@ -39,6 +40,7 @@ import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 
 const genres = ref([]);
+const movies = ref([]);
 
 const getGenres = async () => {
   try {
