@@ -64,7 +64,7 @@ export const useMovieFormStore = defineStore('movieForm', () => {
         url,
         method,
         data: payload,
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: isEditing.value ? { 'Content-Type': 'multipart/form-data' } : {"Content-Type": "application/json"}
       });
 
       resetForm();

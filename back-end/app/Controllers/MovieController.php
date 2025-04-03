@@ -92,7 +92,6 @@ class MovieController
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
         $requestData['genres'] = json_decode($requestData['genres'], true);
-
         try {
             $movie->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
@@ -101,7 +100,7 @@ class MovieController
             return jsonResponse($movie);
         } catch (Exception $e) {
             http_response_code(500);
-            return json_encode($e->getMessage());
+            return json_encode( error_get_last());
         }
     }
 
