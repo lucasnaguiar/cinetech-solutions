@@ -156,4 +156,6 @@ class Movie extends BaseModel
 
         return $stmt;
     }
+
+    public function updateCover($movie, $cover): void {}
 }

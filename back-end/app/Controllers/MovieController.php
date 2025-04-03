@@ -206,10 +206,17 @@ class MovieController
             ], 500);
         }
 
-        return jsonResponse([
-            'success' => true,
-            'message' => 'Arquivo salvo com sucesso!',
-            'relative_path' => 'public/storage/covers/' . $fileName
-        ], 200);
+        try {
+            $movie->cover = 'public/storage/covers/' . $fileName;
+            $movie->update();
+            return jsonResponse([
+                'success' => true,
+                'message' => 'Arquivo salvo com sucesso!',
+                'relative_path' => 'public/storage/covers/' . $fileName
+            ], 200);
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+            return json_encode($e->getMessage());
+        }
     }
 }
