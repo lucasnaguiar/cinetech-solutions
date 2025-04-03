@@ -208,7 +208,7 @@ class MovieController
         }
 
         try {
-            $movie->cover = 'public/storage/covers/' . $fileName;
+            $movie->cover = 'storage/covers/' . $fileName;
             $movie->update();
             return jsonResponse([
                 'success' => true,
