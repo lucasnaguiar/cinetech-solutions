@@ -51,8 +51,8 @@ class MovieController
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
 
-        $requestData['genres'] = json_decode($requestData['genres'], true);
-
+        if (!is_array($requestData['genres']))
+            $requestData['genres'] = json_decode($requestData['genres'], true);
         try {
             $movieModel = new Movie();
 
@@ -90,6 +90,7 @@ class MovieController
 
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
+        $requestData['genres'] = json_decode($requestData['genres'], true);
 
         try {
             $movie->validateGenreIds($requestData['genres']);
@@ -98,7 +99,7 @@ class MovieController
             $movie = $this->movieService->update($movie, $requestData);
             return jsonResponse($movie);
         } catch (Exception $e) {
-            http_response_code($e->getCode());
+            http_response_code(500);
             return json_encode($e->getMessage());
         }
     }
@@ -131,10 +132,30 @@ class MovieController
     private function validateRequest(array $requestData): void
     {
         $v = new Validator($requestData);
-        $v->rule('required', ['title', 'genres', 'release_date', 'duration']);
+        $v->rule('required', ['title', 'genres', 'release_date', 'duration', 'cover']);
         $v->rule('lengthMax', 'title', 255);
         $v->rule('lengthMax', 'description', 255);
         $v->rule('lengthMax', 'trailer_link', 255);
+
+        if (!isset($_FILES['cover']) || !is_uploaded_file($_FILES['cover']['tmp_name'])) {
+            throw new Exception('Imagem nao enviada');
+        }
+
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+        $maxSize = 2 * 1024 * 1024; // 5MB
+        if (!in_array($requestData['cover']['type'], $allowedTypes)) {
+            throw new Exception(json_encode([
+                'success' => false,
+                'error' => 'Tipo de arquivo não permitido'
+            ], 422));
+        }
+
+        if ($requestData['cover']['size'] > $maxSize) {
+            throw new Exception(json_encode([
+                'success' => false,
+                'error' => 'Arquivo muito grande (máx. 5MB)'
+            ]), 422);
+        }
 
         if (!$v->validate()) {
             throw new Exception($v->errors());

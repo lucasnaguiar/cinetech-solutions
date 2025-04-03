@@ -13,21 +13,26 @@ class MovieService
     public function store($requestData): Movie
     {
 
-        $movie = new Movie();
-        $movie->setTitle($requestData->title);
-        $movie->setDescription($requestData->description);
-        $movie->setReleaseDate($requestData->release_date);
-        $movie->setTrailerLink($requestData->trailer_link);
-        $movie->setCover($this->uploadCover($movie, $requestData->cover));
-        $movie->setDuration($requestData->duration);
+        try {
+            $movie = new Movie();
+            $cover = $this->uploadCover($movie, $requestData->cover);
+            $movie->setTitle($requestData->title);
+            $movie->setDescription($requestData->description);
+            $movie->setReleaseDate($requestData->release_date);
+            $movie->setTrailerLink($requestData->trailer_link);
+            $movie->setCover($cover);
+            $movie->setDuration($requestData->duration);
 
-        $movie = $movie->save();
+            $movie = $movie->save();
 
-        $movie->saveMovieGenres($requestData->genres);
+            $movie->saveMovieGenres($requestData->genres);
 
-        $movie->genres = $movie->getGenres();
+            $movie->genres = $movie->getGenres();
 
-        return $movie;
+            return $movie;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     public function update($movie, $requestData): Movie
@@ -42,30 +47,14 @@ class MovieService
         $movie->setCover($coverPath);
         $movie->setDuration($requestData->duration);
         $movie->update();
-        $movie->saveMovieGenres($requestData->genres);
+        if ($requestData->genres)
+            $movie->saveMovieGenres($requestData->genres);
 
         return $movie;
     }
 
     public function validateFile($file)
     {
-        $allowedTypes = ['image/jpeg', 'image/png','image/jpg', 'image/webp'];
-        $maxSize = 2 * 1024 * 1024; // 5MB
-
-        if (!in_array($file['type'], $allowedTypes)) {
-            throw new Exception(json_encode([
-                'success' => false,
-                'error' => 'Tipo de arquivo não permitido'
-            ], 422));
-        }
-
-        if ($file['size'] > $maxSize) {
-            throw new Exception(json_encode([
-                'success' => false,
-                'error' => 'Arquivo muito grande (máx. 5MB)'
-            ]), 422);
-        }
-
         if (!is_dir(self::UPLOAD_DIR)) {
             if (!mkdir(self::UPLOAD_DIR, 0755, true)) {
                 $error = error_get_last();
@@ -84,7 +73,6 @@ class MovieService
                 'details' => 'Verifique as permissões do diretório: ' . self::UPLOAD_DIR
             ]), 422);
         }
-
     }
 
     public function updateCover($movie, $requestData): Movie
@@ -101,10 +89,10 @@ class MovieService
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $fileName = Uuid::uuid4() . '.' . $extension;
         $targetPath = self::UPLOAD_DIR . $fileName;
-        
+
         try {
             $this->validateFile($file);
-            
+
             if (!move_uploaded_file($_FILES['cover']['tmp_name'], $targetPath)) {
                 $error = error_get_last();
                 $errorDetails = [

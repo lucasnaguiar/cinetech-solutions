@@ -102,3 +102,12 @@ function jsonResponse(mixed $data, ?int $status = 200): void
     echo json_encode($data);
     exit;
 }
+
+function dd(...$vars) {
+    foreach ($vars as $var) {
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+    exit;
+}

@@ -8,12 +8,12 @@ export const useMovieFormStore = defineStore('movieForm', () => {
 
   const formData = reactive<Movie>({
     id: null,
-    title: 'Toy Story',
-    genres: [2, 3, 4],
-    trailer_link: 'www.google.com.br',
-    release_date: '2025-04-01',
-    duration: 120,
-    description: 'brinquedos',
+    title: '',
+    genres: [],
+    trailer_link: '',
+    release_date: '',
+    duration: null,
+    description: '',
     cover: null
   });
 
@@ -51,7 +51,7 @@ export const useMovieFormStore = defineStore('movieForm', () => {
       payload.append('title', formData.title || '');
       payload.append('trailer_link', formData.trailer_link || '');
       payload.append('release_date', formData.release_date || '');
-      payload.append('duration', formData.duration ? formData.duration.toString() : '');
+      payload.append('duration', formData.duration || '');
       payload.append('description', formData.description || '');
 
       if (formData.cover) {

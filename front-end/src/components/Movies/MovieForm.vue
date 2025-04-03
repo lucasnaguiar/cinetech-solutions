@@ -2,7 +2,7 @@
     <div class="border p-2 rounded-3 shadow pb-4 mx-2">
         <div class="border p-2 rounded-3 shadow pb-4 mx-2">
       <h2 class="text-base/7 font-semibold text-gray-900">
-        {{ isEditing ? 'Editar Filme' : 'Cadastro de Filmes' }}
+        {{ movieFormStore.isEditing ? 'Editar Filme' : 'Cadastro de Filmes' }}
       </h2>
 
       <div class="pm-2">
@@ -56,24 +56,19 @@
         <button type="button" class="text-sm/6 font-semibold text-gray-900">Voltar</button>
       </RouterLink>
       <button type="button" @click="movieFormStore.submitForm" class="btn btn-primary">
-        {{ isEditing ? 'Atualizar' : 'Cadastrar' }}
+        {{ movieFormStore.isEditing ? 'Atualizar' : 'Cadastrar' }}
       </button>
     </div>
     </div>
 </template>
 <script setup lang="ts">
-import type Genre from '@/types/genre';
-import { onMounted, ref } from 'vue';
+
+import { onMounted } from 'vue';
 import { api } from '@/axios.ts';
 
 import { useMovieFormStore } from '@/stores/movieForm.ts'
-import { storeToRefs } from 'pinia';
 const movieFormStore = useMovieFormStore();
 
-const genreList = ref<Genre[]>([])
-
-const isEditing = ref(false)
-const coverFile = ref<File>()
 
 onMounted(() => {
     getGenres()
