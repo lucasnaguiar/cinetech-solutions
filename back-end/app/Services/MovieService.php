@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
 class MovieService
 {
     public const UPLOAD_DIR = __DIR__ . '/../../public/storage/covers/';
+    
     public function store($requestData): Movie
     {
 

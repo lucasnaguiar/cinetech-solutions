@@ -50,9 +50,20 @@ class MovieController
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
+        
+        if (isset($requestData['genres']) && !is_array($requestData['genres'])) {
+            $decoded = json_decode($requestData['genres'], true);
+            
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $requestData['genres'] = $decoded;
+            } else {
 
-        if (!is_array($requestData['genres']))
-            $requestData['genres'] = json_decode($requestData['genres'], true);
+                $requestData['genres'] = [$requestData['genres']]; // ou [] se preferir
+            }
+        } else {
+            $requestData['genres'] = $requestData['genres'] ?? [];
+        }
+
         try {
             $movieModel = new Movie();
 
@@ -91,7 +102,20 @@ class MovieController
 
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
-        $requestData['genres'] = json_decode($requestData['genres'], true);
+        
+        if (isset($requestData['genres']) && !is_array($requestData['genres'])) {
+            $decoded = json_decode($requestData['genres'], true);
+            
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $requestData['genres'] = $decoded;
+            } else {
+
+                $requestData['genres'] = [$requestData['genres']]; // ou [] se preferir
+            }
+        } else {
+            $requestData['genres'] = $requestData['genres'] ?? [];
+        }
+
         try {
             $movie->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
