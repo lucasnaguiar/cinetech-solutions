@@ -11,30 +11,25 @@
     <div class="row">
       <div class="col-12 d-flex justify-content-center">
         <div class="input-group border border-2 rounded-3 shadow-sm mb-3">
-          <input
-              type="text"
-              class="form-control border border-0"
-              placeholder="Buscar filmes..."
-              v-model="searchQuery"
-              aria-label="Buscar filmes"
-              aria-describedby="basic-addon2">
+          <input type="text" class="form-control border border-0" placeholder="Buscar filmes..." v-model="searchQuery"
+            aria-label="Buscar filmes" aria-describedby="basic-addon2">
 
           <div class="input-group-prepend">
             <i class="fas fa-search p-3 text-primary fw-bold"></i>
           </div>
         </div>
         <button
-            class="btn btn-primary mt-1 shadow py-4 px-3 h-10 rounded-circle mx-3 d-flex align-items-center justify-content-center"
-            type="button"
-            @click="toggleSelectVisibility">
+          class="btn btn-primary mt-1 shadow py-4 px-3 h-10 rounded-circle mx-3 d-flex align-items-center justify-content-center"
+          type="button" @click="toggleSelectVisibility">
           <i class="fas fa-filter"></i>
         </button>
       </div>
 
       <div v-if="showSelect" class="col-12 mt-2 border border-1 p-3 mx-3 rounded-4">
         <label for="genreSelect" class="form-label">Selecione o Gênero</label>
-        <select class="form-select border-2 rounded-3 shadow-sm p-2" id="genreSelect" v-model="selectedGenre">
-          <option >Todos os Gêneros</option>
+        <select class="form-select border-2 rounded-3 shadow-sm p-2" id="genreSelect" @change="getMovies()"
+          v-model="selectedGenre">
+          <option>Todos os Gêneros</option>
           <option v-for="genre in genres" :key="genre.id" :value="genre.id">
             {{ genre.name }}
           </option>
@@ -44,23 +39,14 @@
     </div>
 
     <div class="row mt-5" v-if="movies.length > 0">
-      <MovieCard
-          v-for="movie in movies"
-          :key="movie.id"
-          :movie="movie"
-          :onShowDetails="openModal"
-      />
+      <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" :onShowDetails="openModal" />
     </div>
 
     <div v-else class="d-flex justify-content-center align-items-center mb-5">
       <SemResultado />
     </div>
 
-    <DetailsModal
-        v-if="selectedMovie"
-        :movie="selectedMovie"
-        @close="closeModal"
-    />
+    <DetailsModal v-if="selectedMovie" :movie="selectedMovie" @close="closeModal" />
   </div>
 
   <Footer></Footer>
@@ -82,11 +68,11 @@ const genres = ref<any>({ data: [], meta: {}, links: [] });
 const searchQuery = ref('');
 const selectedMovie = ref(null);
 const showSelect = ref(false);
-
+const selectedGenre = ref()
 const getMovies = async (search = '') => {
   try {
     const response = await api.get('/movies', {
-      params: search.length >= 3 ? { search } : {},
+      params: { search: search, genre: selectedGenre.value },
     });
     movies.value = response.data;
   } catch (error) {
@@ -115,6 +101,7 @@ watch(searchQuery, (newValue) => {
     getMovies();
   }
 });
+
 
 const toggleSelectVisibility = () => {
   showSelect.value = !showSelect.value;
