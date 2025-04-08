@@ -1,5 +1,5 @@
 <template>
-  <n-card class="mb-4" title="Cadastro de Filmes">
+  <n-card class="mb-4" title="Edição de Filme">
     <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
       <n-grid :cols="24" :x-gap="24">
         <!-- Título -->
@@ -68,7 +68,7 @@
           <n-button type="default">Voltar</n-button>
         </router-link>
         <n-button type="primary" attr-type="submit" :loading="isLoading" :disabled="isLoading">
-          Cadastrar
+          Salvar
         </n-button>
       </n-space>
     </n-form>
