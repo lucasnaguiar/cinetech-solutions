@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 import { api } from '@/axios';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 import type Movie from '@/types/movie';
 import type Genre from '@/types/genre';
 
 export const useMovieFormStore = defineStore('movieForm', () => {
-
-  const formData = reactive<Movie>({
+  const formData = ref<Movie>({
     id: null,
     title: '',
     genres: [],
@@ -17,16 +16,18 @@ export const useMovieFormStore = defineStore('movieForm', () => {
     cover: null
   });
 
-  const genreList = ref<Genre[]>([])
-
+  const genreList = ref<Genre[]>([]);
   const isEditing = ref(false);
+  const formRef = ref<any>(null); // Referência para o formulário
+  const isLoading = ref(false); // Estado de carregamento
+
   const loadMovie = (movie: Movie) => {
-    Object.assign(formData, movie);
+    formData.value = { ...movie };
     isEditing.value = true;
   };
 
   const resetForm = () => {
-    Object.assign(formData, {
+    formData.value = {
       id: null,
       title: '',
       genres: [],
@@ -35,32 +36,36 @@ export const useMovieFormStore = defineStore('movieForm', () => {
       duration: null,
       description: '',
       cover: null
-    });
+    };
     isEditing.value = false;
   };
 
-
   const submitForm = async () => {
     try {
-
-      const url = isEditing.value ? `/movies/${formData.id}` : '/movies'
+      // Valida o formulário antes de enviar
+      await formRef.value?.validate();
+      
+      isLoading.value = true;
+      
+      const url = isEditing.value ? `/movies/${formData.value.id}` : '/movies';
       const method = isEditing.value ? 'PUT' : 'POST';
 
       const payload = new FormData();
+      payload.append('title', formData.value.title || '');
+      payload.append('trailer_link', formData.value.trailer_link || '');
+      payload.append('release_date', formData.value.release_date || '');
+      payload.append('duration', String(formData.value.duration) || '');
+      payload.append('description', formData.value.description || '');
 
-      payload.append('title', formData.title || '');
-      payload.append('trailer_link', formData.trailer_link || '');
-      payload.append('release_date', formData.release_date || '');
-      payload.append('duration', formData.duration || '');
-      payload.append('description', formData.description || '');
-
-      if (formData.cover) {
-        payload.append('cover', formData.cover);
+      if (formData.value.cover) {
+        payload.append('cover', formData.value.cover);
       }
 
-      payload.append('genres', JSON.stringify(formData.genres));
+      if (formData.value.genres?.length) {
+        payload.append('genres', JSON.stringify(formData.value.genres));
+      }
 
-      const response = await api.request({
+      const response = await api({
         url,
         method,
         data: payload,
@@ -70,10 +75,21 @@ export const useMovieFormStore = defineStore('movieForm', () => {
       resetForm();
       return response.data;
     } catch (error) {
+      console.error('Erro ao enviar filme:', error);
       throw error;
+    } finally {
+      isLoading.value = false;
     }
   };
 
-
-  return { formData, isEditing, genreList, loadMovie, resetForm, submitForm };
+  return { 
+    formData, 
+    isEditing, 
+    genreList, 
+    formRef,
+    isLoading,
+    loadMovie, 
+    resetForm, 
+    submitForm 
+  };
 });

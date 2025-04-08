@@ -4,7 +4,7 @@ export default interface Movie {
     genres: number[] | null;
     trailer_link: string | null;
     release_date: string | null; // ISO format (YYYY-MM-DD)
-    duration: string | null;
+    duration: number | null; // Alterado de string para number
     description: string | null;
-    cover?: File | null; // Arquivo é sempre opcional
+    cover?: File | null;
 };

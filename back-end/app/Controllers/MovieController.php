@@ -50,10 +50,10 @@ class MovieController
     {
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
-        
+
         if (isset($requestData['genres']) && !is_array($requestData['genres'])) {
             $decoded = json_decode($requestData['genres'], true);
-            
+
             if (json_last_error() === JSON_ERROR_NONE) {
                 $requestData['genres'] = $decoded;
             } else {
@@ -72,7 +72,6 @@ class MovieController
 
             $requestData = (object) $requestData;
             $movie = $this->movieService->store($requestData);
-
         } catch (Exception $e) {
             http_response_code(500);
             return json_encode($e->getMessage());
@@ -102,10 +101,10 @@ class MovieController
 
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
-        
+
         if (isset($requestData['genres']) && !is_array($requestData['genres'])) {
             $decoded = json_decode($requestData['genres'], true);
-            
+
             if (json_last_error() === JSON_ERROR_NONE) {
                 $requestData['genres'] = $decoded;
             } else {
@@ -124,7 +123,7 @@ class MovieController
             return jsonResponse($movie);
         } catch (Exception $e) {
             http_response_code(500);
-            return json_encode( error_get_last());
+            return json_encode(error_get_last());
         }
     }
 
