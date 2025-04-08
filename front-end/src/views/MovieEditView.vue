@@ -112,12 +112,12 @@ interface MovieForm {
 }
 
 const formData = ref<MovieForm>({
-  title: 'Matrix',
-  genres: [1, 2],
-  trailer_link: 'https://youtube.com/fdjshjfsdfds',
-  release_date: '2010-01-01',
-  duration: 120,
-  description: 'fsdfsdfdsfdsfdsfdsfdsdfsdfsfdsfsddfs',
+  title: '',
+  genres: [],
+  trailer_link: '',
+  release_date: '',
+  duration: '',
+  description: '',
 });
 const route = useRoute();
 
