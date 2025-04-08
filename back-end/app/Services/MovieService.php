@@ -10,18 +10,17 @@ use Ramsey\Uuid\Uuid;
 class MovieService
 {
     public const UPLOAD_DIR = __DIR__ . '/../../public/storage/covers/';
-    
+
     public function store($requestData): Movie
     {
 
         try {
             $movie = new Movie();
-            $cover = $this->uploadCover($movie, $requestData->cover);
             $movie->setTitle($requestData->title);
             $movie->setDescription($requestData->description);
             $movie->setReleaseDate($requestData->release_date);
             $movie->setTrailerLink($requestData->trailer_link);
-            $movie->setCover($cover);
+            $movie->setCover('movie.svg');
             $movie->setDuration($requestData->duration);
 
             $movie = $movie->save();
@@ -39,13 +38,11 @@ class MovieService
     public function update($movie, $requestData): Movie
     {
 
-        $coverPath = isset($requestData->cover) ? $this->uploadCover($requestData->cover) : $movie->cover;
-
         $movie->setTitle($requestData->title);
         $movie->setDescription($requestData->description);
         $movie->setReleaseDate($requestData->release_date);
         $movie->setTrailerLink($requestData->trailer_link);
-        $movie->setCover($coverPath);
+        $movie->setCover($movie->cover);
         $movie->setDuration($requestData->duration);
         $movie->update();
         if ($requestData->genres)

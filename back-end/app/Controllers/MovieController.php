@@ -7,7 +7,6 @@ use Ramsey\Uuid\Uuid;
 use Exception;
 use App\Models\Movie;
 use App\Services\MovieService;
-use finfo;
 use Pecee\SimpleRouter\SimpleRouter;
 use Valitron\Validator;
 
@@ -116,6 +115,7 @@ class MovieController
         }
 
         try {
+            dd($requestData);
             $movie->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
             $requestData = (object) $requestData;
@@ -139,11 +139,13 @@ class MovieController
         $request = SimpleRouter::request();
         $requestData = $request->getInputHandler()->all();
 
-        if (empty($requestData['cover'])) {
-            return jsonResponse(['message' => 'É obrigatório enviar o arquivo de imagem.'], 422);
-        }
-
         try {
+            $this->validateCover($requestData);
+
+            if (empty($requestData['cover'])) {
+                return jsonResponse(['message' => 'É obrigatório enviar o arquivo de imagem.'], 422);
+            }
+
             $requestData = (object) $requestData;
             $movie = $this->movieService->updateCover($movie, $requestData);
             return jsonResponse($movie, 200);
@@ -152,14 +154,8 @@ class MovieController
         }
     }
 
-    private function validateRequest(array $requestData): void
+    private function validateCover($requestData)
     {
-        $v = new Validator($requestData);
-        $v->rule('required', ['title', 'genres', 'release_date', 'duration', 'cover']);
-        $v->rule('lengthMax', 'title', 255);
-        $v->rule('lengthMax', 'description', 255);
-        $v->rule('lengthMax', 'trailer_link', 255);
-
         if (!isset($_FILES['cover']) || !is_uploaded_file($_FILES['cover']['tmp_name'])) {
             throw new Exception('Imagem nao enviada');
         }
@@ -179,6 +175,17 @@ class MovieController
                 'error' => 'Arquivo muito grande (máx. 5MB)'
             ]), 422);
         }
+    }
+
+    private function validateRequest(array $requestData): void
+    {
+        $v = new Validator($requestData);
+        $v->rule('required', ['title', 'genres', 'release_date', 'duration']);
+        $v->rule('lengthMax', 'title', 255);
+        $v->rule('lengthMax', 'description', 255);
+        $v->rule('lengthMax', 'trailer_link', 255);
+
+
 
         if (!$v->validate()) {
             throw new Exception($v->errors());
