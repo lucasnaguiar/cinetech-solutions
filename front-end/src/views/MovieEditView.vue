@@ -98,16 +98,16 @@ import {
 } from 'naive-ui';
 
 interface Genre {
-  id: number;
+  id: number | string;
   name: string;
 }
-
+const router = useRouter()
 interface MovieForm {
   title: string;
   genres: number[];
   trailer_link: string;
   release_date: string;
-  duration: number | null;
+  duration: number | null | string;
   description: string;
 }
 
@@ -229,7 +229,8 @@ const handleSubmit = async () => {
       sendImage()
     }
 
-    return response.data;
+    router.push({ name: 'movie-list' })
+
   } catch (error) {
     console.error('Erro ao cadastrar filme:', error);
 

@@ -95,6 +95,7 @@ import {
   type FormRules,
   type FormInst
 } from 'naive-ui';
+import { useRouter } from 'vue-router';
 
 interface Genre {
   id: number;
@@ -182,7 +183,7 @@ const rules: FormRules = {
     { min: 10, message: 'A descrição deve ter pelo menos 10 caracteres', trigger: 'blur' }
   ]
 };
-
+const router = useRouter()
 const loadGenres = async () => {
   try {
     const response = await api.get('/genres');
@@ -227,7 +228,8 @@ const handleSubmit = async () => {
       sendImage()
     }
 
-    return response.data;
+    router.push({ name: 'movie-list' })
+
   } catch (error) {
     console.error('Erro ao cadastrar filme:', error);
 
