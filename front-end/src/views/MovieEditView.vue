@@ -211,7 +211,7 @@ const handleSubmit = async () => {
     payload.append('genres', JSON.stringify(formData.value.genres));
 
 
-    const response = await api.post('/movies/' + movieId.value, payload, {
+    const response = await api.put('/movies/' + movieId.value, payload, {
       headers: { 'Content-Type': 'application/json' }
     });
 

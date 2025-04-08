@@ -45,6 +45,7 @@ class MovieService
         $movie->setCover($movie->cover);
         $movie->setDuration($requestData->duration);
         $movie->update();
+        
         if ($requestData->genres)
             $movie->saveMovieGenres($requestData->genres);
 

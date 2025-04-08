@@ -115,7 +115,6 @@ class MovieController
         }
 
         try {
-            dd($requestData);
             $movie->validateGenreIds($requestData['genres']);
             $this->validateRequest($requestData);
             $requestData = (object) $requestData;
