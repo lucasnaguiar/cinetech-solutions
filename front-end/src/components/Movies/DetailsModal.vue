@@ -1,6 +1,7 @@
 <!-- MovieModal.vue -->
 <template>
-  <div class="modal modal-lg fade" id="movieDetailsModal" tabindex="-1" aria-labelledby="movieDetailsModalLabel" aria-hidden="true" v-if="movie">
+  <div class="modal modal-lg fade" id="movieDetailsModal" tabindex="-1" aria-labelledby="movieDetailsModalLabel"
+    aria-hidden="true" v-if="movie">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -11,7 +12,13 @@
           <div v-if="movie.trailer_link" class="ratio ratio-16x9 mb-4">
             <iframe :src="embedYouTubeUrl(movie.trailer_link)" frameborder="0" allowfullscreen></iframe>
           </div>
-          <p><strong>Gênero:</strong> {{ movie.genre }}</p>
+
+          <ul>
+            <li class="inline px-1 font-bold" v-for="genre in movieDetail?.genres"> <span
+                class="rounded-full bg-gray-200 px-2.5 py-0.5 text-sm whitespace-nowrap text-gray-700">
+                {{ genre.name }}
+              </span></li>
+          </ul>
           <p><strong>Descrição:</strong> {{ movie.description }}</p>
           <p><strong>Lançamento:</strong> {{ formatDate(movie.release_date) }}</p>
           <p><strong>Duração:</strong> {{ movie.duration }}</p>
@@ -25,11 +32,22 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { api } from '@/axios';
+import { defineProps, defineEmits, onMounted, ref } from 'vue';
+const movieDetail = ref();
 
 const props = defineProps({
   movie: Object
 });
+
+
+onMounted(() => {
+  api.get('/movies/' + props.movie.id).then(
+    (response) => {
+      movieDetail.value = response.data
+    }
+  )
+})
 
 const emit = defineEmits(['close']);
 

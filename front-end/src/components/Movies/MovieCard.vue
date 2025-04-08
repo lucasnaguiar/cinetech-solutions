@@ -7,7 +7,7 @@
       </div>
       <img :src="coverUrl + movie.cover" class="" alt="Imagem de capa">
       <div class="card-body">
-        <h5 class="card-title">{{ movie.title }}</h5>
+        <h5 class="card-title">{{ movie?.title }}</h5>
         <div class="btn btn-sm btn-primary mt-4" @click="showDetails">
           <i class="fa fa-plus fs-6 mx-1" aria-hidden="true"></i>
           Detalhes
